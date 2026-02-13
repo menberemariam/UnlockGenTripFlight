@@ -241,6 +241,7 @@ class _FlightBookingScreenState extends State<FlightBookingScreen>
                               color: Colors.blue.shade50,
                               borderRadius: BorderRadius.circular(16),
                             ),
+                            child: FlightBookingMiddle(),
 
                           ),
 
