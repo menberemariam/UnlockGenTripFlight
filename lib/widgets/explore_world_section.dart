@@ -98,18 +98,34 @@ class ExploreWorldSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.all(16),
-            child: Text(
-              title,
-              style: TextStyle(
-                color: titleColor,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8), // slightly less bottom padding
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: titleColor,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(
+                    Icons.bookmark_add_outlined,
+                    color: Colors.blue,
+                    size: 24,
+                  ),
+                  onPressed: () {
+                    Get.to(() => const FlightResultsScreen());
+                  },
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+              ],
             ),
           ),
-          IconButton(onPressed: (){Get.to(FlightResultsScreen());}, icon: Icon(Icons.bookmark_add),),
-
           ...data.asMap().entries.map((entry) {
             final idx = entry.key;
             final item = entry.value;
