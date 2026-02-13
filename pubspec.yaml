@@ -1,0 +1,37 @@
+name: trip
+description: "A new Flutter project."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.3
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  get: ^4.6.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  # Move this to the same level as flutter_test
+  flutter_native_splash: ^2.4.0
+
+# Add this at the bottom level (not indented)
+flutter_native_splash:
+  color: "#1E5EFF"                     # Blue background
+  image: assets/icons/splash_logo.jpg  # Your JPG text image
+  android: true
+  ios: true
+  android_12:
+    color: "#1E5EFF"
+    image: assets/icons/splash_logo.jpg
+  fullscreen: true
+
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/icons/
