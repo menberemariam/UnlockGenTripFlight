@@ -9,8 +9,8 @@ import '../../widgets/flight_status.dart';
 import '../../widgets/travel_inspiration_section.dart';
 import 'booking_middle_controller.dart';
 
-class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
+class FlightBookingMiddle extends StatelessWidget {
+  FlightBookingMiddle({super.key});
 
   final HomeController controller = Get.put(HomeController());
 
