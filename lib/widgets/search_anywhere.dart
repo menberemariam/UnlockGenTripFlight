@@ -1,22 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class FlightSearchController extends GetxController {
-  var isLoading = true.obs;
-  var hasResults = false.obs;
+import '../controllers/flight_search_controller.dart';
 
-  @override
-  void onInit() {
-    super.onInit();
-    Future.delayed(const Duration(seconds: 2), () {
-      isLoading.value = false;
-      hasResults.value = false;
-    });
-  }
-}
-
-class FlightSearchResultsScreen extends StatelessWidget {
-  const FlightSearchResultsScreen({super.key});
+class SearchAnyWhere extends StatelessWidget {
+  const SearchAnyWhere({super.key});
 
   @override
   Widget build(BuildContext context) {

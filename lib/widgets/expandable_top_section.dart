@@ -28,11 +28,11 @@ class ExpandableTopBar extends StatelessWidget {
                 _ActionButton(
                   icon: Icons.public,
                   label: 'Search anywhere',
-                  onTap: () => Get.to(FlightSearchResultsScreen())
+                  onTap: () => Get.to(SearchAnyWhere())
                 ),
                 _ActionButton(
-                  icon: Icons.notification_add,
-                  label: 'Price alerts',
+                  icon: Icons.show_chart,
+                  label: 'Flight status',
                   onTap: () => Get.to(FlightStatus())
                 ),
                 _ActionButton(
@@ -58,8 +58,8 @@ class ExpandableTopBar extends StatelessWidget {
             child: Column(
               children: [
                 _ExpandableItem(
-                  icon: Icons.show_chart,
-                  title: 'Flight Status',
+                  icon: Icons.notification_add,
+                  title: 'Flight Alert',
                   route: '/flight_status',
                 ),
                 const Divider(height: 1, color: Colors.grey),
