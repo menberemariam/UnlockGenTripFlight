@@ -5,9 +5,8 @@ import 'package:get/get.dart';
 import '../../widgets/business_class_promo.dart';
 import '../../widgets/expandable_top_section.dart';
 import '../../widgets/explore_world_section.dart';
-import '../../widgets/flight_status.dart';
 import '../../widgets/travel_inspiration_section.dart';
-import 'booking_middle_controller.dart';
+import '../controllers/booking_middle_controller.dart';
 
 class FlightBookingMiddle extends StatelessWidget {
   FlightBookingMiddle({super.key});

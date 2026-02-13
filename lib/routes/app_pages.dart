@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import '../screen/home/flight_booking_middle.dart';
+import '../screens/home_screen.dart';
 import 'app_routes.dart';
 
 class AppPages {

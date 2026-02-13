@@ -1,10 +1,9 @@
 // lib/screens/home/widgets/expandable_top_bar.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:trip3/widgets/flight_status.dart';
-import 'package:trip3/widgets/search_anywhere.dart';
-
-import '../screen/home/home_controller.dart';
+import 'package:trip/widgets/search_anywhere.dart';
+import '../controllers/booking_middle_controller.dart';
+import 'flight_status.dart';
 
 class ExpandableTopBar extends StatelessWidget {
   final HomeController controller;

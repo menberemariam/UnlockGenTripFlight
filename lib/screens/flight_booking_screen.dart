@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'flight_booking_middle.dart';
+
 class FlightBookingScreen extends StatefulWidget {
   const FlightBookingScreen({super.key});
 
@@ -23,6 +25,9 @@ class _FlightBookingScreenState extends State<FlightBookingScreen>
   bool _isExpanded = false;
   String _selectedClass = 'First';
   bool _isClassDropdownOpen = false;
+
+  // Moved here – real state for checkbox
+  bool _flightPlusHotelChecked = false;
 
   final List<String> _flightClasses = [
     'Economy',
@@ -100,6 +105,7 @@ class _FlightBookingScreenState extends State<FlightBookingScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true, // ← helps with keyboard
       backgroundColor: Colors.grey[300],
       body: SafeArea(
         child: Column(
@@ -134,7 +140,6 @@ class _FlightBookingScreenState extends State<FlightBookingScreen>
                             return _buildAdBanner(_advertisements[index]);
                           },
                         ),
-                        // Back Button
                         Positioned(
                           top: 16,
                           left: 16,
@@ -154,7 +159,6 @@ class _FlightBookingScreenState extends State<FlightBookingScreen>
                             ),
                           ),
                         ),
-                        // Profile Icon
                         Positioned(
                           top: 16,
                           right: 16,
@@ -171,7 +175,6 @@ class _FlightBookingScreenState extends State<FlightBookingScreen>
                             ),
                           ),
                         ),
-                        // Page Indicator
                         Positioned(
                           bottom: 16,
                           right: 16,
@@ -191,15 +194,16 @@ class _FlightBookingScreenState extends State<FlightBookingScreen>
                             ),
                           ),
                         ),
-
                       ],
                     ),
                   ),
                 );
               },
             ),
+
             Expanded(
               child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(), // ← force scroll
                 child: Column(
                   children: [
                     Container(
@@ -217,45 +221,48 @@ class _FlightBookingScreenState extends State<FlightBookingScreen>
                         ],
                       ),
                       child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            _buildTabButton('One-way', 0),
-                            _buildTabButton('Round-trip', 1),
-                            _buildTabButton('Multi-city', 2),
-                          ],
-                        ),
-                        const SizedBox(height: 24),
-                        if (_selectedTab == 0) ..._buildOneWayContent(),
-                        if (_selectedTab == 1) ..._buildRoundTripContent(),
-                        if (_selectedTab == 2) ..._buildMultiCityContent(),
-                        const SizedBox(height: 20),
-                      ],
-                    ),
-                  ),
-                          Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                            padding: const EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                              color: Colors.blue.shade50,
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: FlightBookingMiddle(),
-
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              _buildTabButton('One-way', 0),
+                              _buildTabButton('Round-trip', 1),
+                              _buildTabButton('Multi-city', 2),
+                            ],
                           ),
-
+                          const SizedBox(height: 24),
+                          if (_selectedTab == 0) ..._buildOneWayContent(),
+                          if (_selectedTab == 1) ..._buildRoundTripContent(),
+                          if (_selectedTab == 2) ..._buildMultiCityContent(),
+                          const SizedBox(height: 20),
                         ],
-                  ),
+                      ),
+                    ),
+
+                    // Middle section – added constraints to prevent it taking infinite height
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: const EdgeInsets.all(0),
+                      decoration: BoxDecoration(
+                        color: Colors.blue.shade50,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(minHeight: 100, maxHeight: 600),
+                        child: FlightBookingMiddle(),
+                      ),
+                    ),
+
+                    const SizedBox(height: 80), // ← generous bottom space
+                  ],
                 ),
               ),
-
+            ),
           ],
         ),
       ),
     );
   }
-
   Widget _buildAdBanner(Map<String, String> ad) {
     return Container(
       decoration: BoxDecoration(
@@ -318,7 +325,6 @@ class _FlightBookingScreenState extends State<FlightBookingScreen>
               ),
             ),
             const SizedBox(height: 12),
-
           ],
         ),
       ),
@@ -378,6 +384,7 @@ class _FlightBookingScreenState extends State<FlightBookingScreen>
       ],
     );
   }
+
   Widget _buildLineReversField() {
     return Row(
       children: [
@@ -404,6 +411,7 @@ class _FlightBookingScreenState extends State<FlightBookingScreen>
       ],
     );
   }
+
   Widget _buildDividerField() {
     return const Divider(
       color: Colors.grey,
@@ -437,33 +445,25 @@ class _FlightBookingScreenState extends State<FlightBookingScreen>
           ),
         ],
       ),
-
       _buildDividerField(),
       const SizedBox(height: 10),
-
       _buildPassengersAndClass(),
-
       _buildDividerField(),
-
       const SizedBox(height: 10),
       ..._buildFlightHotelSection(),
-
       _buildSearchButton(),
       const SizedBox(height: 10),
-
       _buildRecentSearch(),
     ];
   }
 
   List<Widget> _buildRoundTripContent() {
     return [
-
       _buildLocationField(
         icon: Icons.flight_takeoff,
         label: 'London',
       ),
       _buildLineReversField(),
-
       _buildLocationField(
         icon: Icons.flight_land,
         label: 'Bangkok',
@@ -494,6 +494,7 @@ class _FlightBookingScreenState extends State<FlightBookingScreen>
       _buildRecentSearch(),
     ];
   }
+
   List<Widget> _buildMultiCityContent() {
     return [
       Column(
@@ -507,19 +508,16 @@ class _FlightBookingScreenState extends State<FlightBookingScreen>
               color: Colors.black87,
             ),
           ),
-
           const SizedBox(height: 16),
           _buildLocationField(
             icon: Icons.flight_takeoff,
             label: 'Bangkok',
           ),
-
           _buildLineReversField(),
           _buildLocationField(
             icon: Icons.flight_land,
             label: 'Bangkok',
           ),
-
           _buildDividerField(),
           const SizedBox(height: 10),
           Row(
@@ -538,7 +536,7 @@ class _FlightBookingScreenState extends State<FlightBookingScreen>
         ],
       ),
       _buildDividerField(),
-const SizedBox(height: 10,),
+      const SizedBox(height: 10),
       Container(
         decoration: BoxDecoration(
           color: Colors.grey[50],
@@ -554,13 +552,11 @@ const SizedBox(height: 10,),
                 color: Colors.black87,
               ),
             ),
-
             const SizedBox(height: 10),
             _buildLocationField(
               icon: Icons.flight_takeoff,
               label: 'Bangkok',
             ),
-
             _buildLineReversField(),
             _buildLocationField(
               icon: Icons.flight_land,
@@ -610,13 +606,15 @@ const SizedBox(height: 10,),
       _buildDividerField(),
       const SizedBox(height: 10),
       _buildPassengersAndClass(),
-    const Divider(
-    color: Colors.grey,
-    thickness: 0.3,),
-    const SizedBox(height: 10),
+      const Divider(
+        color: Colors.grey,
+        thickness: 0.3,
+      ),
+      const SizedBox(height: 10),
       _buildSearchButton(),
     ];
   }
+
   Widget _buildPassengersAndClass() {
     return Column(
       children: [
@@ -657,8 +655,8 @@ const SizedBox(height: 10,),
               },
               child: Icon(
                 _isClassDropdownOpen
-                  ? Icons.keyboard_arrow_up
-                  : Icons.keyboard_arrow_down,
+                    ? Icons.keyboard_arrow_up
+                    : Icons.keyboard_arrow_down,
                 color: Colors.grey,
               ),
             ),
@@ -700,7 +698,6 @@ const SizedBox(height: 10,),
                   ),
                 ),
 
-                // Class Options
                 ListView.separated(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -727,12 +724,12 @@ const SizedBox(height: 10,),
                         ),
                       ),
                       trailing: isSelected
-                        ? const Icon(
-                            Icons.check,
-                            color: Color(0xFF1E5EFF),
-                            size: 20,
-                          )
-                        : null,
+                          ? const Icon(
+                        Icons.check,
+                        color: Color(0xFF1E5EFF),
+                        size: 20,
+                      )
+                          : null,
                       onTap: () {
                         setState(() {
                           _selectedClass = className;
@@ -783,7 +780,6 @@ const SizedBox(height: 10,),
             },
             activeColor: const Color(0xFF1E5EFF),
           ),
-
           const Text(
             'Flight + Hotel',
             style: TextStyle(

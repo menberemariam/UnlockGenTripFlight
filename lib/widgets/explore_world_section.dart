@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:trip3/widgets/more_flights.dart';
-import '../screen/home/home_controller.dart';
+import '../controllers/booking_middle_controller.dart';
 import 'destination_card.dart';
+import 'more_flights.dart';
 
 class ExploreWorldSection extends StatelessWidget {
   const ExploreWorldSection({super.key});
