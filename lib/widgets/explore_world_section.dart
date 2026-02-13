@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/booking_middle_controller.dart';
 import 'destination_card.dart';
-import 'more_flights.dart';
+import '../screens/more_flights_screen.dart';
 
 class ExploreWorldSection extends StatelessWidget {
   const ExploreWorldSection({super.key});

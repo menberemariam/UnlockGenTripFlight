@@ -37,7 +37,4 @@ flutter:
   uses-material-design: true
   assets:
     - assets/icons/
-    - assets/images/flight_anywhere.jpg
-    - assets/images/flight_beach.jpg
-    - assets/images/flight_cheap.jpg
-    - assets/images/flight_trending.jpg
+    - assets/images/

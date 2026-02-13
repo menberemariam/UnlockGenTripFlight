@@ -247,7 +247,7 @@ class _FlightBookingScreenState extends State<FlightBookingScreen>
                         borderRadius: BorderRadius.circular(0),
                       ),
                       child: ConstrainedBox(
-                        constraints: const BoxConstraints(minHeight: 100, maxHeight: 1050),
+                        constraints: const BoxConstraints(minHeight: 100, maxHeight: 1150),
                         child: FlightBookingMiddle(),
                       ),
                     ),

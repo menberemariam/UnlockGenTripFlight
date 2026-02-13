@@ -1,9 +1,12 @@
 // lib/screens/home/widgets/expandable_top_bar.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:trip/widgets/search_anywhere.dart';
+import 'package:trip/screens/price_alert_screen.dart';
+import 'package:trip/screens/search_anywhere_screen.dart';
 import '../controllers/booking_middle_controller.dart';
-import 'flight_status.dart';
+import '../screens/flight_status_screen.dart';
+import '../screens/frequent_flyer_programs.dart';
+import '../screens/my_booking_screen.dart';
 
 class ExpandableTopBar extends StatelessWidget {
   final HomeController controller;
@@ -60,19 +63,19 @@ class ExpandableTopBar extends StatelessWidget {
                 _ExpandableItem(
                   icon: Icons.notification_add,
                   title: 'Flight Alert',
-                  route: '/flight_status',
+                  route: PriceAlertScreen(),
                 ),
                 const Divider(height: 1, color: Colors.grey),
                 _ExpandableItem(
                   icon: Icons.calendar_today,
                   title: 'My bookings',
-                  route: '/my_bookings',
+                  route: MyBookingsScreen(),
                 ),
                 const Divider(height: 1, color: Colors.grey),
                 _ExpandableItem(
                   icon: Icons.credit_card,
                   title: 'Frequent flyer programs',
-                  route: '/frequent_flyer',
+                  route: FrequentFlyerScreen(),
                 ),
               ],
             ),
@@ -123,7 +126,7 @@ class _ActionButton extends StatelessWidget {
 class _ExpandableItem extends StatelessWidget {
   final IconData icon;
   final String title;
-  final String route;
+  final Widget route;
 
   const _ExpandableItem({
     required this.icon,
@@ -134,7 +137,7 @@ class _ExpandableItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Get.toNamed(route),
+      onTap: () => Get.to(route),
       child: ListTile(
         leading: Icon(icon, color: Colors.blue, size: 16,),
         title: Text(title, style: const TextStyle(color: Colors.black, fontSize: 16)),

@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import '../screens/price_alert_screen.dart';
 import '../screens/home_screen.dart';
 import 'app_routes.dart';
 
@@ -8,6 +9,9 @@ class AppPages {
       name: AppRoutes.HOME,
       page: () => HomeScreen(),
     ),
-    // Add other routes here as you create the pages
+    GetPage(
+      name: AppRoutes.ALERT,
+      page: () => PriceAlertScreen(),
+    ),
   ];
 }

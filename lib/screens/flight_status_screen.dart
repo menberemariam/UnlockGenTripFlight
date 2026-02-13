@@ -24,7 +24,7 @@ class FlightStatus extends StatelessWidget {
       backgroundColor:
       const Color(0xFFEEF4FF), // light blue-gray bg like trip.com
       appBar: AppBar(
-        backgroundColor: Color(0xFF95B5F1),
+        backgroundColor: Color(0xFF4081F8),
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -80,7 +80,7 @@ class FlightStatus extends StatelessWidget {
                             Text(
                               'Flight no.',
                               style: TextStyle(
-                                color: Color(0xFF95B5F1),
+                                color: Color(0xFF4081F8),
                                 fontSize: 15,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -88,7 +88,7 @@ class FlightStatus extends StatelessWidget {
                             const SizedBox(height: 4),
                             Container(
                               height: 2,
-                              color: Color(0xFF95B5F1),
+                              color: Color(0xFF4081F8),
                             ),
                           ],
                         ),
@@ -190,15 +190,13 @@ class FlightStatus extends StatelessWidget {
                           Get.snackbar('Error', 'Please enter flight number');
                           return;
                         }
-
-                        // TODO: call API or navigate to result
                         Get.toNamed('/flight-status-result', arguments: {
                           'flight': flight,
                           'date': date,
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF95B5F1),
+                        backgroundColor: Color(0xFF4081F8),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                         elevation: 0,
                       ),
@@ -271,7 +269,7 @@ class FlightStatus extends StatelessWidget {
                 color: const Color(0xFFE6F0FF),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Icon(icon, color: Color(0xFF7D98CC), size: 26),
+              child: Icon(icon, color: Color(0xFF4081F8), size: 26),
             ),
             const SizedBox(width: 16),
             Expanded(
