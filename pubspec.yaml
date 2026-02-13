@@ -10,7 +10,9 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
-  get: ^4.6.6
+  get: ^4.6.6  
+  get_storage: ^2.1.1
+
 
 dev_dependencies:
   flutter_test:
@@ -35,3 +37,8 @@ flutter:
   uses-material-design: true
   assets:
     - assets/icons/
+    - asset/iconss/icon_nothing_found.png
+    - asset/images/flight_anywhere.jpg
+    - asset/images/flight_beach.jpg
+    - asset/images/flight_cheap.jpg
+    - asset/images/flight_trending.jpg
