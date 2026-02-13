@@ -9,26 +9,23 @@ import '../../widgets/travel_inspiration_section.dart';
 import '../controllers/booking_middle_controller.dart';
 
 class FlightBookingMiddle extends StatelessWidget {
-  FlightBookingMiddle({super.key});
-
-  final HomeController controller = Get.put(HomeController());
+  const FlightBookingMiddle({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ExpandableTopBar(controller: controller),
-            const BusinessClassPromo(),
-            const TravelInspirationHeader(),
-            const SizedBox(height: 8),
-            const ExploreWorldSection(),
-            const SizedBox(height: 24),
-          ],
-        ),
-      ),
+    final HomeController controller = Get.put(HomeController());
+
+    return Column(                          // ← changed from Scaffold → Column
+      mainAxisSize: MainAxisSize.min,       // ← very important in this context
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ExpandableTopBar(controller: controller),
+        const BusinessClassPromo(),
+        const TravelInspirationHeader(),
+        const SizedBox(height: 8),
+        const ExploreWorldSection(),
+        const SizedBox(height: 24),
+      ],
     );
   }
 }

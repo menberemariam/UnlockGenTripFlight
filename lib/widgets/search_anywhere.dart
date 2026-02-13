@@ -82,20 +82,20 @@ class FlightSearchResultsScreen extends StatelessWidget {
               children: [
                 _buildCategoryChip(
                   label: 'Anywhere',
-                  assetPath: 'asset/images/flight_anywhere.jpg',
+                  assetPath: 'assets/images/flight_anywhere.jpg',
                   // isSelected: true,
                 ),
                 _buildCategoryChip(
                   label: 'Cheap flights',
-                  assetPath: 'asset/images/flight_cheap.jpg',
+                  assetPath: 'assets/images/flight_cheap.jpg',
                 ),
                 _buildCategoryChip(
                   label: 'Trending',
-                  assetPath: 'asset/images/flight_trending.jpg',
+                  assetPath: 'assets/images/flight_trending.jpg',
                 ),
                 _buildCategoryChip(
                   label: 'Beach',
-                  assetPath: 'asset/images/flight_beach.jpg',
+                  assetPath: 'assets/images/flight_beach.jpg',
                 ),
               ],
             ),
@@ -153,7 +153,7 @@ class FlightSearchResultsScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Image.asset(
-                        'asset/images/icon_nothing_found.png',
+                        'assets/icons/icon_nothing_found.png',
                         width: 220,
                         height: 220,
 

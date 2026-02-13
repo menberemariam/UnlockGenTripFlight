@@ -241,19 +241,17 @@ class _FlightBookingScreenState extends State<FlightBookingScreen>
 
                     // Middle section – added constraints to prevent it taking infinite height
                     Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                       padding: const EdgeInsets.all(0),
                       decoration: BoxDecoration(
-                        color: Colors.blue.shade50,
-                        borderRadius: BorderRadius.circular(5),
+                        borderRadius: BorderRadius.circular(0),
                       ),
                       child: ConstrainedBox(
-                        constraints: const BoxConstraints(minHeight: 100, maxHeight: 600),
+                        constraints: const BoxConstraints(minHeight: 100, maxHeight: 1050),
                         child: FlightBookingMiddle(),
                       ),
                     ),
 
-                    const SizedBox(height: 80), // ← generous bottom space
                   ],
                 ),
               ),

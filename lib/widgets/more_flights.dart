@@ -10,7 +10,7 @@ class MoreFlights extends StatelessWidget {
       'city': 'Hong Kong',
       'country': 'China',
       'highlight': null,
-      'image': 'asset/images/flight_anywhere.jpg',
+      'image': 'assets/images/flight_anywhere.jpg',
       'dates': [
         {'day': 'Mon, Feb 16', 'price': 98.30},
         {'day': 'Wed, Feb 18', 'price': 107.70},
@@ -20,7 +20,7 @@ class MoreFlights extends StatelessWidget {
       'city': 'Seoul',
       'country': 'South Korea',
       'highlight': 'Myeong-dong',
-      'image': 'asset/images/flight_trending.jpg',
+      'image': 'assets/images/flight_trending.jpg',
       'dates': [
         {'day': 'Fri, Feb 13', 'price': 123.80},
         {'day': 'Sun, Feb 15', 'price': 129.60},
@@ -30,7 +30,7 @@ class MoreFlights extends StatelessWidget {
       'city': 'Manila',
       'country': 'Philippines',
       'highlight': null,
-      'image': 'asset/images/flight_beach.jpg',
+      'image': 'assets/images/flight_beach.jpg',
       'dates': [
         {'day': 'Sat, Feb 28', 'price': 124.90},
         {'day': 'Wed, Feb 25', 'price': 140.60},
@@ -40,7 +40,7 @@ class MoreFlights extends StatelessWidget {
       'city': 'Taipei',
       'country': 'China',
       'highlight': null,
-      'image': 'asset/images/flight_anywhere.jpg',
+      'image': 'assets/images/flight_anywhere.jpg',
       'dates': [
         {'day': 'Mon, Feb 16', 'price': 142.10},
         {'day': 'Tue, Feb 17', 'price': 153.10},
@@ -50,7 +50,7 @@ class MoreFlights extends StatelessWidget {
       'city': 'Kuala Lumpur',
       'country': 'Malaysia',
       'highlight': 'Dewan Perdana Felda',
-      'image': 'asset/images/flight_trending.jpg',
+      'image': 'assets/images/flight_trending.jpg',
       'dates': [],
     },
   ];
@@ -114,20 +114,20 @@ class MoreFlights extends StatelessWidget {
                 children: [
                   _buildCategoryChip(
                     label: 'Anywhere',
-                    assetPath: 'asset/images/flight_anywhere.jpg',
+                    assetPath: 'assets/images/flight_anywhere.jpg',
                     // isSelected: true,
                   ),
                   _buildCategoryChip(
                     label: 'Cheap flights',
-                    assetPath: 'asset/images/flight_cheap.jpg',
+                    assetPath: 'assets/images/flight_cheap.jpg',
                   ),
                   _buildCategoryChip(
                     label: 'Trending',
-                    assetPath: 'asset/images/flight_trending.jpg',
+                    assetPath: 'assets/images/flight_trending.jpg',
                   ),
                   _buildCategoryChip(
                     label: 'Beach',
-                    assetPath: 'asset/images/flight_beach.jpg',
+                    assetPath: 'assets/images/flight_beach.jpg',
                   ),
                 ],
               ),
@@ -267,13 +267,13 @@ class MoreFlights extends StatelessWidget {
               child: Stack(
                 children: [
                   Image.asset(
-                    dest['image'] ?? 'assets/image/no-flight.jpg',
+                    dest['image'] ?? 'assets/icons/icon_nothing_found.png',
                     height: 140,
                     width: double.infinity,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       return Image.asset(
-                        'asset/images/nothing_flight.png',
+                        'assets/icons/icon_nothing_flight.png',
                         height: 140,
                         width: double.infinity,
                         fit: BoxFit.cover,
