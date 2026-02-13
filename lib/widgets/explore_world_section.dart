@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/booking_middle_controller.dart';
+import '../screens/flight_result_screen.dart';
 import 'destination_card.dart';
 import '../screens/more_flights_screen.dart';
 
@@ -107,6 +108,8 @@ class ExploreWorldSection extends StatelessWidget {
               ),
             ),
           ),
+          IconButton(onPressed: (){Get.to(FlightResultsScreen());}, icon: Icon(Icons.bookmark_add),),
+
           ...data.asMap().entries.map((entry) {
             final idx = entry.key;
             final item = entry.value;
