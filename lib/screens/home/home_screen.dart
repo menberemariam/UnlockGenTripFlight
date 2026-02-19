@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'flight_booking_screen.dart';
+import '../booking_screen/flight_booking_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -15,15 +15,24 @@ class HomeScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
               decoration: const BoxDecoration(
-                color: Color(0xFF1E5EFF),
+                gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  stops: [0.7, 1.0],
+                  colors: [
+                    Color(0xFFFFC107),
+                    Color(0xFF121212),
+                  ],
+                ),
+
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
-                    'Trip.com',
+                    'HW_travels.com',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Color(0xFF000000),
                       fontSize: 26,
                       fontWeight: FontWeight.bold,
                     ),
@@ -72,11 +81,11 @@ class HomeScreen extends StatelessWidget {
                               _buildCategoryItem(
                                 'assets/icons/icons8-hotel-48.png',
                                 'Hotels',
-                                const Color(0xFF1E5EFF),
+                                const Color(0xFF212121),
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  Get.to(() => const FlightBookingScreen());
+                                  Get.to(() => FlightBookingScreen());
                                 },
                                 child: _buildCategoryItem(
                                   'assets/icons/icons8-airplane-take-off-48.png',
@@ -93,14 +102,12 @@ class HomeScreen extends StatelessWidget {
                                 ),
                               _buildCategoryItem(
                                 'assets/icons/icons8-subway-48.png',
-
                                 'Trains',
                                 const Color(0xFF1E5EFF),
                               ),
                             ],
                           ),
                           const SizedBox(height: 24),
-                          // Second Row - Additional Categories
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
@@ -146,11 +153,11 @@ class HomeScreen extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(30),
-                          border: Border.all(color: Color(0xFF1E5EFF)),
+                          border: Border.all(color: Color(0xFFFFD700)),
                         ),
                         child: Row(
                           children: [
-                            const Icon(Icons.public, color: Color(0xFF1E5EFF)),
+                            const Icon(Icons.public, color: Color(0xFFFFD700)),
                             const SizedBox(width: 12),
                             const Text(
                               'Where to?',
@@ -163,7 +170,7 @@ class HomeScreen extends StatelessWidget {
                             Container(
                               padding: const EdgeInsets.all(8),
                               decoration: const BoxDecoration(
-                                color: Color(0xFF1E5EFF),
+                                color: Color(0xFFFFD700),
                                 shape: BoxShape.circle,
                               ),
                               child: const Icon(
@@ -191,12 +198,12 @@ class HomeScreen extends StatelessWidget {
                           _buildCityLink('Tokyo'),
                           Row(
                             children: const [
-                              Icon(Icons.map, color: Color(0xFF1E5EFF), size: 18),
+                              Icon(Icons.map, color: Color(0xFFFFD700), size: 18),
                               SizedBox(width: 4),
                               Text(
                                 'Map',
                                 style: TextStyle(
-                                  color: Color(0xFF1E5EFF),
+                                  color: Color(0xFFB8860B),
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -278,14 +285,14 @@ class HomeScreen extends StatelessWidget {
                           ElevatedButton(
                             onPressed: () {},
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF1E5EFF),
+                              backgroundColor: const Color(0xFFFFC107),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
                             child: const Text(
                               'Claim All',
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(color: Colors.black),
                             ),
                           ),
                         ],
@@ -293,8 +300,6 @@ class HomeScreen extends StatelessWidget {
                     ),
                     
                     const SizedBox(height: 16),
-                    
-                    // Promo Cards
                     SizedBox(
                       height: 120,
                       child: ListView(
@@ -339,8 +344,8 @@ class HomeScreen extends StatelessWidget {
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
                                   colors: [
-                                    const Color(0xFF0D6EFD),
-                                    const Color(0xFF0A58CA),
+                                    const Color(0xFFFFC107),
+                                    const Color(0xFF000000),
                                   ],
                                 ),
                               ),
@@ -382,13 +387,13 @@ class HomeScreen extends StatelessWidget {
                                         vertical: 10,
                                       ),
                                       decoration: BoxDecoration(
-                                        color: Colors.amber,
+                                        color: Color(0xFFFFC107),
                                         borderRadius: BorderRadius.circular(20),
                                       ),
                                       child: const Text(
                                         'Book Now',
                                         style: TextStyle(
-                                          color: Colors.white,
+                                          color: Colors.black,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -414,8 +419,8 @@ class HomeScreen extends StatelessWidget {
                                         begin: Alignment.topCenter,
                                         end: Alignment.bottomCenter,
                                         colors: [
-                                          Colors.grey[400]!,
-                                          Colors.grey[300]!,
+                                          const Color(0xFFFFC107),
+                                          const Color(0xFF000000),
                                         ],
                                       ),
                                     ),
@@ -426,21 +431,21 @@ class HomeScreen extends StatelessWidget {
                                     child: Container(
                                       padding: const EdgeInsets.all(12),
                                       decoration: BoxDecoration(
-                                        color: const Color(0xFF0D6EFD),
+                                        color: const Color(0xFFFFC107),
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       child: Column(
                                         children: const [
                                           Icon(
                                             Icons.smart_toy,
-                                            color: Colors.white,
+                                            color: Colors.black,
                                             size: 24,
                                           ),
                                           SizedBox(height: 4),
                                           Text(
                                             'GENIE',
                                             style: TextStyle(
-                                              color: Colors.white,
+                                              color: Colors.black,
                                               fontSize: 10,
                                               fontWeight: FontWeight.bold,
                                             ),
@@ -497,7 +502,7 @@ class HomeScreen extends StatelessWidget {
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w500,
-              color: Color(0xFF1E5EFF),
+              color: Color(0xFFB8860B),
               height: 1.2,
             ),
           ),
@@ -517,7 +522,7 @@ class HomeScreen extends StatelessWidget {
         city,
         style: TextStyle(
           fontSize: 12,
-          color: Colors.grey[700],
+          color: Color(0xFFB8860B),
         ),
       ),
     );
@@ -537,8 +542,6 @@ class HomeScreen extends StatelessWidget {
             assetPath,
             width: 28,
             height: 28,
-
-
           ),
         ),
         const SizedBox(height: 8),
@@ -546,7 +549,8 @@ class HomeScreen extends StatelessWidget {
           label,
           style: TextStyle(
             fontSize: 11,
-            color: Colors.grey[700],
+            color: Color(0xFFB8860B)
+            ,
           ),
         ),
       ],
@@ -610,7 +614,7 @@ class HomeScreen extends StatelessWidget {
       ),
       child: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: const Color(0xFF1E5EFF),
+        selectedItemColor: const Color(0xFFFFC107),
         unselectedItemColor: Colors.grey,
         currentIndex: 0,
         items: const [
