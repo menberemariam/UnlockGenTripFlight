@@ -41,7 +41,7 @@ class SearchAnyWhere extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.edit, color: Colors.black),
+            icon: const Icon(Icons.edit, color: Color(0xFFEAA21B)),
             onPressed: () {
               // edit search
             },
@@ -49,7 +49,7 @@ class SearchAnyWhere extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(right: 8),
             child: IconButton(
-              icon: const Icon(Icons.currency_exchange, color: Colors.black),
+              icon: const Icon(Icons.currency_exchange, color: Color(0xFFEAA21B)),
               onPressed: () {
                 // edit search
               },
@@ -112,12 +112,12 @@ class SearchAnyWhere extends StatelessWidget {
                   child: const Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.filter_list, size: 18, color: Color(0xFF0066FF)),
+                      Icon(Icons.filter_list, size: 18, color: Color(0xFFEAA21B)),
                       SizedBox(width: 4),
                       Text(
                         'Filters',
                         style: TextStyle(
-                          color: Color(0xFF0066FF),
+                          color: Color(0xFFEAA21B),
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -194,7 +194,7 @@ Widget _buildCategoryChip({
       margin: const EdgeInsets.only(right: 12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
-        color: isSelected ? const Color(0xFF006CFF) : Colors.white,
+        color: isSelected ? const Color(0xFFEAA21B) : Colors.white,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.08),
@@ -227,7 +227,7 @@ Widget _buildCategoryChip({
               label,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: isSelected ? Colors.blue : Colors.white,
+                color: isSelected ? Color(0xFFEAA21B) : Colors.white,
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
                 height: 1.2,
@@ -258,7 +258,7 @@ class _DateField extends StatelessWidget {
           ),
           child: Row(
             children: [
-              const Icon(Icons.calendar_today_outlined, size: 12, color: Color(0xFF0066FF)),
+              const Icon(Icons.calendar_today_outlined, size: 12, color: Color(0xFFEAA21B)),
               const SizedBox(width: 5),
               Text(
                 hint,

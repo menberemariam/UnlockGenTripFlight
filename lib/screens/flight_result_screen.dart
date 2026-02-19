@@ -1,12 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-import 'package:trip/screens/select_fare_screen.dart';
+import 'package:get/get.dart';
 
 import '../controllers/flight_result_controller.dart';
+import 'select_fare_screen.dart'; // Make sure this file exists or comment out navigation for now
 
 class FlightResultsScreen extends StatelessWidget {
   const FlightResultsScreen({super.key});
@@ -27,11 +24,15 @@ class FlightResultsScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications_outlined),
-            onPressed: () => Get.snackbar("Price Alerts", "Set up alerts"),
+            onPressed: () {
+              Get.snackbar("Price Alerts", "Price alerts feature coming soon");
+            },
           ),
           IconButton(
             icon: const Icon(Icons.more_vert),
-            onPressed: () {},
+            onPressed: () {
+              Get.snackbar("Menu", "Options: Share • Help • Settings");
+            },
           ),
         ],
         backgroundColor: Colors.white,
@@ -40,31 +41,37 @@ class FlightResultsScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          // Date selector row
+          // Date selector
           Container(
             color: Colors.white,
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              child: Row(
-                children: List.generate(5, (index) {
-                  final date = DateTime(2025, 3, 6 + index);
-                  final isSelected = date.day == controller.selectedDate.value.day;
+              child: Obx(() => Row(
+                children: List.generate(7, (index) {
+                  final baseDate = DateTime(2026, 2, 18);
+                  final date = baseDate.add(Duration(days: index));
+                  final isSelected = date.day == controller.selectedDate.value.day &&
+                      date.month == controller.selectedDate.value.month;
 
                   return GestureDetector(
-                    onTap: () => controller.selectedDate.value = date,
+                    onTap: () => controller.changeDate(date),
                     child: Container(
                       margin: const EdgeInsets.symmetric(horizontal: 4),
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                       decoration: BoxDecoration(
-                        color: isSelected ? Colors.blue : Colors.transparent,
+                        color: isSelected ? Color(0xFFEAA21B) : Colors.transparent,
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: isSelected ? Colors.blue : Colors.grey.shade300),
+                        border: Border.all(
+                          color: isSelected ? Color(0xFFEAA21B) : Colors.grey.shade300,
+                          width: 1.5,
+                        ),
                       ),
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            ["Fri", "Sat", "Sun", "Mon", "Tue"][index],
+                            ["Tue", "Wed", "Thu", "Fri", "Sat", "Sun", "Mon"][index],
                             style: TextStyle(
                               color: isSelected ? Colors.white : Colors.grey[700],
                               fontSize: 13,
@@ -75,7 +82,7 @@ class FlightResultsScreen extends StatelessWidget {
                             "${date.day}",
                             style: TextStyle(
                               color: isSelected ? Colors.white : Colors.black87,
-                              fontSize: 18,
+                              fontSize: 17,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -84,41 +91,71 @@ class FlightResultsScreen extends StatelessWidget {
                     ),
                   );
                 }),
-              ),
+              )),
             ),
           ),
 
-          // Average price info
+          // Average price banner (dynamic)
           Container(
             color: Colors.white,
             padding: const EdgeInsets.all(12),
-            child: const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Average one-way price per passenger, taxes and fees included",
-                  style: TextStyle(fontSize: 13, color: Colors.grey),
-                ),
-                SizedBox(height: 4),
-                Text(
-                  "Average one-way price per passenger, taxes and fees included",
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                ),
-              ],
-            ),
+            child: Obx(() {
+              final flights = controller.displayedFlights;
+              if (flights.isEmpty) {
+                return const Text(
+                  "No flights available",
+                  style: TextStyle(color: Colors.grey),
+                );
+              }
+              final prices = flights.map((f) => f.price).toList();
+              final minPrice = prices.reduce((a, b) => a < b ? a : b);
+              final maxPrice = prices.reduce((a, b) => a > b ? a : b);
+
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Average one-way price per passenger, taxes and fees included",
+                    style: TextStyle(fontSize: 13, color: Colors.grey),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    "\$${minPrice} – \$${maxPrice}",
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              );
+            }),
           ),
 
-          // Filters row
+          // Filters
           Container(
             color: Colors.white,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Row(
               children: [
-                _FilterChip(label: "Filters", icon: Icons.filter_list),
+                _FilterChip(
+                  label: "Filters",
+                  icon: Icons.filter_list,
+                  onTap: () => Get.snackbar("Filters", "More filters coming soon"),
+                ),
                 const SizedBox(width: 8),
-                _FilterChip(label: "Nonstop", icon: Icons.flight),
+                Obx(
+                      () => _FilterChip(
+                    label: "Nonstop",
+                    icon: Icons.flight,
+                    active: controller.nonstopOnly.value,
+                    onTap: controller.toggleNonstop,
+                  ),
+                ),
                 const SizedBox(width: 8),
-                _FilterChip(label: "Checked baggage included"),
+                Obx(
+                      () => _FilterChip(
+                    label: "Checked baggage",
+                    active: controller.baggageIncluded.value,
+                    onTap: controller.toggleBaggage,
+                  ),
+                ),
               ],
             ),
           ),
@@ -126,96 +163,112 @@ class FlightResultsScreen extends StatelessWidget {
           // Sort tabs
           Container(
             color: Colors.white,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            child: Obx(() => Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _SortTab("Recommended", isActive: false),
-                _SortTab("Nonstop first", isActive: false),
-                _SortTab("Cheapest", isActive: true),
+                _SortTab(
+                  "Recommended",
+                  isActive: controller.sortBy.value == SortOption.recommended,
+                  onTap: () => controller.setSortMode(SortOption.recommended),
+                ),
+                _SortTab(
+                  "Nonstop first",
+                  isActive: controller.sortBy.value == SortOption.nonstopFirst,
+                  onTap: () => controller.setSortMode(SortOption.nonstopFirst),
+                ),
+                _SortTab(
+                  "Cheapest",
+                  isActive: controller.sortBy.value == SortOption.cheapest,
+                  onTap: () => controller.setSortMode(SortOption.cheapest),
+                ),
               ],
-            ),
+            )),
           ),
 
           // Flight list
           Expanded(
-            child: ListView(
-              padding: const EdgeInsets.all(12),
-              children: [
-                FlightCard(
-                  departureTime: "7:30 AM",
-                  duration: "2h 20m",
-                  arrivalTime: "9:50 AM",
-                  price: "\$45",
-                  airline: "Peach Aviation",
-                  aircraft: "Airbus A320",
-                  departureCode: "NRT T1",
-                  arrivalCode: "FUK D",
-                  isCheapest: true,
-                ),
-                FlightCard(
-                  departureTime: "6:25 AM",
-                  duration: "2h 30m",
-                  arrivalTime: "8:55 AM",
-                  price: "\$47",
-                  airline: "Jetstar Japan",
-                  aircraft: "Airbus A320",
-                  departureCode: "NRT T3",
-                  arrivalCode: "FUK D",
-                ),
-                FlightCard(
-                  departureTime: "7:15 AM",
-                  duration: "2h 30m",
-                  arrivalTime: "9:45 AM",
-                  price: "\$47",
-                  airline: "Jetstar Japan",
-                  aircraft: "Airbus A320",
-                  departureCode: "NRT T3",
-                  arrivalCode: "FUK D",
-                ),
-                FlightCard(
-                  departureTime: "8:05 AM",
-                  duration: "2h 20m",
-                  arrivalTime: "10:25 AM",
-                  price: "\$51",
-                  airline: "Jetstar Japan",
-                  aircraft: "Airbus A320",
-                  departureCode: "NRT T3",
-                  arrivalCode: "FUK D",
-                ),
-              ],
-            ),
+            child: Obx(() {
+              final flights = controller.displayedFlights;
+
+              if (flights.isEmpty) {
+                return const Center(child: Text("No flights found"));
+              }
+
+              final minPrice = flights.map((f) => f.price).reduce((a, b) => a < b ? a : b);
+
+              return ListView.builder(
+                padding: const EdgeInsets.all(12),
+                itemCount: flights.length,
+                itemBuilder: (context, index) {
+                  final flight = flights[index];
+                  return FlightCard(
+                    departureTime: flight.departureTime,
+                    duration: flight.duration,
+                    arrivalTime: flight.arrivalTime,
+                    price: "\$${flight.price}",
+                    airline: flight.airline,
+                    aircraft: flight.aircraft,
+                    departureCode: flight.departureCode,
+                    arrivalCode: flight.arrivalCode,
+                    isCheapest: flight.price == minPrice,
+                    onBook: () => Get.to(() => const SelectFareScreen()),
+                  );
+                },
+              );
+            }),
           ),
         ],
       ),
     );
   }
 }
+
+// ────────────────────────────────────────────────
 // Reusable widgets
+// ────────────────────────────────────────────────
 
 class _FilterChip extends StatelessWidget {
   final String label;
   final IconData? icon;
+  final bool active;
+  final VoidCallback onTap;
 
-  const _FilterChip({required this.label, this.icon});
+  const _FilterChip({
+    required this.label,
+    this.icon,
+    this.active = false,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade300),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (icon != null) ...[
-            Icon(icon, size: 16, color: Colors.grey[700]),
-            const SizedBox(width: 4),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: active ? Colors.blue.withOpacity(0.1) : null,
+          border: Border.all(color: active ? Color(0xFFEAA21B) : Colors.grey.shade300),
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (icon != null) ...[
+              Icon(icon, size: 18, color: active ? Color(0xFFEAA21B) : Colors.grey[700]),
+              const SizedBox(width: 6),
+            ],
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 14,
+                color: active ? Color(0xFFEAA21B) : Colors.black87,
+                fontWeight: active ? FontWeight.w600 : FontWeight.normal,
+              ),
+            ),
           ],
-          Text(label, style: const TextStyle(fontSize: 13)),
-        ],
+        ),
       ),
     );
   }
@@ -224,28 +277,36 @@ class _FilterChip extends StatelessWidget {
 class _SortTab extends StatelessWidget {
   final String label;
   final bool isActive;
+  final VoidCallback onTap;
 
-  const _SortTab(this.label, {required this.isActive});
+  const _SortTab(this.label, {required this.isActive, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            color: isActive ? Colors.blue : Colors.grey[700],
-            fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              color: isActive ? Color(0xFFEAA21B) : Colors.grey[800],
+              fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
+              fontSize: 15,
+            ),
           ),
-        ),
-        if (isActive)
-          Container(
-            margin: const EdgeInsets.only(top: 4),
+          const SizedBox(height: 6),
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
             height: 3,
-            width: 40,
-            color: Colors.blue,
+            width: isActive ? 36 : 0,
+            decoration: BoxDecoration(
+              color: Color(0xFFEAA21B),
+              borderRadius: BorderRadius.circular(2),
+            ),
           ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -260,6 +321,7 @@ class FlightCard extends StatelessWidget {
   final String departureCode;
   final String arrivalCode;
   final bool isCheapest;
+  final VoidCallback onBook;
 
   const FlightCard({
     super.key,
@@ -272,13 +334,15 @@ class FlightCard extends StatelessWidget {
     required this.departureCode,
     required this.arrivalCode,
     this.isCheapest = false,
+    required this.onBook,
   });
 
   @override
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 1,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -286,77 +350,75 @@ class FlightCard extends StatelessWidget {
           children: [
             if (isCheapest)
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                 decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(4),
+                  color: Color(0xFFECBC62),
+                  borderRadius: BorderRadius.circular(3),
                 ),
                 child: const Text(
                   "Cheapest",
                   style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
                 ),
               ),
-
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  departureTime,
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(departureTime, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 4),
+                    Text(departureCode, style: const TextStyle(color: Colors.grey, fontSize: 13)),
+                  ],
                 ),
                 Column(
                   children: [
-                    Text(duration, style: const TextStyle(color: Colors.grey)),
-                    const Icon(Icons.arrow_forward, size: 20, color: Colors.grey),
+                    Text(duration, style: const TextStyle(color: Colors.grey, fontSize: 15)),
+                    const Icon(Icons.arrow_forward, size: 24, color: Colors.grey),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(arrivalTime, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 4),
+                    Text(arrivalCode, style: const TextStyle(color: Colors.grey, fontSize: 13)),
                   ],
                 ),
                 Text(
-                  arrivalTime,
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                Text(
                   price,
-                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.blue),
+                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFFEAA21B)),
                 ),
               ],
             ),
 
-            const SizedBox(height: 8),
-
-            Text(
-              "$departureCode → $arrivalCode",
-              style: const TextStyle(color: Colors.grey),
-            ),
-
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
 
             Row(
               children: [
-                const Icon(Icons.flight, size: 16, color: Colors.grey),
-                const SizedBox(width: 6),
-                Text("$airline | $aircraft", style: const TextStyle(fontSize: 14)),
+                const Icon(Icons.flight_takeoff, size: 18, color: Color(0xFFEAA21B)),
+                const SizedBox(width: 8),
+                Text("$airline  •  $aircraft", style: const TextStyle(fontSize: 14)),
               ],
             ),
 
-            const SizedBox(height: 8),
+            const SizedBox(height: 16),
 
-            Row(
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.reorder_sharp),
-                  onPressed: () { Get.to(SelectFareScreen());
-                    },
-                iconSize: 16,
-                  color: Colors.blue,
-
+            Align(
+              alignment: Alignment.centerRight,
+              child: ElevatedButton(
+                onPressed: onBook,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFFEAA21B),
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 12),
                 ),
-                const SizedBox(width: 4),
-                const Text("Book now", style: TextStyle(fontSize: 16, color: Colors.blue,
-                ),
-                )
-              ],
+                child: const Text("Book now", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+              ),
             ),
           ],
         ),

@@ -24,7 +24,7 @@ class FlightStatus extends StatelessWidget {
       backgroundColor:
       const Color(0xFFEEF4FF), // light blue-gray bg like trip.com
       appBar: AppBar(
-        backgroundColor: Color(0xFF4081F8),
+        backgroundColor: Color(0xFFEAA21B),
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -80,7 +80,7 @@ class FlightStatus extends StatelessWidget {
                             Text(
                               'Flight no.',
                               style: TextStyle(
-                                color: Color(0xFF4081F8),
+                                color: Color(0xFFEAA21B),
                                 fontSize: 15,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -88,7 +88,7 @@ class FlightStatus extends StatelessWidget {
                             const SizedBox(height: 4),
                             Container(
                               height: 2,
-                              color: Color(0xFF4081F8),
+                              color: Color(0xFFEAA21B),
                             ),
                           ],
                         ),
@@ -154,17 +154,12 @@ class FlightStatus extends StatelessWidget {
                         firstDate: DateTime(2020),
                         lastDate: DateTime(2030),
                       );
-                      // if (picked != null) {
-                      //   final formatted = DateFormat('EEE, MMM d').format(picked);
-                      //   _dateController.text = formatted;
-                      //   box.write('last_flight_date', formatted);
-                      // }
                     },
                     child: AbsorbPointer(
                       child: TextField(
                         controller: _dateController,
                         decoration: InputDecoration(
-                          suffixIcon: const Icon(Icons.calendar_today, color: Colors.blue),
+                          suffixIcon: const Icon(Icons.calendar_today, color: Color(0xFFEAA21B)),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
                             borderSide: BorderSide(color: Colors.grey[300]!),
@@ -196,7 +191,7 @@ class FlightStatus extends StatelessWidget {
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF4081F8),
+                        backgroundColor:Color(0xFFEAA21B),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                         elevation: 0,
                       ),
@@ -269,7 +264,7 @@ class FlightStatus extends StatelessWidget {
                 color: const Color(0xFFE6F0FF),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Icon(icon, color: Color(0xFF4081F8), size: 26),
+              child: Icon(icon, color: Color(0xFFEAA21B), size: 26),
             ),
             const SizedBox(width: 16),
             Expanded(

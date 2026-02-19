@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../controllers/booking_middle_controller.dart';
 import '../screens/flight_result_screen.dart';
 import 'destination_card.dart';
@@ -10,98 +11,125 @@ class ExploreWorldSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<HomeController>();
+    final controller = Get.find<MiddleController>();
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF6F7FBD), Color(0xFF3350C4)],
+          colors: [Color(0xFFF3CC84), Color(0xFFEDB853)],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          GestureDetector(
-            onTap: () => Get.toNamed('/explore_world'),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Explore the world',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
+          // Header
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Explore the world',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
                   ),
-                  IconButton(
-                    onPressed: (){
-                      Get.to( MoreFlights());
-                    },
-                    icon: const Icon(
-                      Icons.arrow_forward,
-                      color: Colors.white,
-                      size: 20,
-                    ),
+                ),
+                IconButton(
+                  onPressed: () => Get.to(() => MoreFlights()),
+                  icon: const Icon(
+                    Icons.arrow_forward,
+                    color: Colors.white,
+                    size: 28,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Quick city chips
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: const [
+                _CityChip(name: 'Beijing', price: '\$99.80', route: '/beijing'),
+                _CityChip(name: 'Manila', price: '\$97.60', route: '/manila'),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 12),
+
+          // Horizontal sections
+          SizedBox(
+            height: 480,
+            child: Obx(
+                  () => ListView(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                children: [
+                  _buildSection(
+                    title: 'Cheap flights',
+                    titleColor: const Color(0xFF00BFFF),
+                    data: controller.cheapFlights,
+                    labelColor: const Color(0xFF00BFFF),
+                  ),
+                  _buildSection(
+                    title: 'Best deals',
+                    titleColor: const Color(0xFFFF69B4),
+                    data: controller.bestDeals,
+                    labelColor: const Color(0xFFFF69B4),
+                  ),
+                  _buildSection(
+                    title: 'Trending destinations',
+                    titleColor: const Color(0xFFFFA500),
+                    data: controller.trending,
+                    labelColor: const Color(0xFFFFA500),
                   ),
                 ],
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                _CityChip(name: 'Beijing', price: '\$99.80', route: '/beijing'),
-                _CityChip(name: 'Manila',   price: '\$97.60', route: '/manila'),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-          SizedBox(
-            height: 480,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                _buildSection('Cheap flights', const Color(0xFF00BFFF), controller.cheapFlights, const Color(0xFF00BFFF)),
-                _buildSection('Best deals',     const Color(0xFFFF69B4), controller.bestDeals,     const Color(0xFFFF69B4)),
-                _buildSection('Trending destinations', const Color(0xFFFFA500), controller.trending, const Color(0xFFFFA500)),
-              ],
-            ),
-          ),
-          const SizedBox(height: 8),
+
+          const SizedBox(height: 12),
         ],
       ),
     );
   }
 
-  Widget _buildSection(
-      String title,
-      Color titleColor,
-      List<Map<String, String>> data,
-      Color labelColor,
-      ) {
+  Widget _buildSection({
+    required String title,
+    required Color titleColor,
+    required List<Map<String, String>> data,
+    required Color labelColor,
+  }) {
     return Container(
-      width: 220,
-      margin: const EdgeInsets.only(left: 16, right: 8, bottom: 16),
+      width: 260, // increased from 220 → better text/image balance
+      margin: const EdgeInsets.only(left: 8, right: 12, bottom: 16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8), // slightly less bottom padding
+            padding: const EdgeInsets.fromLTRB(16, 16, 12, 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
                   title,
@@ -114,7 +142,7 @@ class ExploreWorldSection extends StatelessWidget {
                 IconButton(
                   icon: const Icon(
                     Icons.bookmark_add_outlined,
-                    color: Colors.blue,
+                    color: Color(0xFFEAA21B),
                     size: 24,
                   ),
                   onPressed: () {
@@ -126,31 +154,40 @@ class ExploreWorldSection extends StatelessWidget {
               ],
             ),
           ),
+
+          // Cards
           ...data.asMap().entries.map((entry) {
             final idx = entry.key;
             final item = entry.value;
+
             return DestinationCard(
               index: idx + 1,
-              name: item['name']!,
-              date: item['date']!,
-              price: item['price']!,
-              imageUrl: item['image']!,
+              name: item['name'] ?? 'Unknown',
+              date: item['date'] ?? '—',
+              price: item['price'] ?? 'N/A',
+              imageUrl: item['image'] ?? '',
               labelColor: labelColor,
             );
-          }),
-          const Padding(
-            padding: EdgeInsets.all(16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  'View more >',
-                  style: TextStyle(
-                    color: Color(0xFF007AFF),
-                    fontSize: 14,
+          }).toList(),
+
+          // View more
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 1),
+            child: GestureDetector(
+              onTap: () => Get.to(() => const FlightResultsScreen()),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    'View more  →',
+                    style: TextStyle(
+                      color: Color(0xFFEAA21B),
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
@@ -177,22 +214,36 @@ class _CityChip extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
             decoration: BoxDecoration(
-              color: const Color(0xFF4A90E2),
-              borderRadius: BorderRadius.circular(5),
+              color: const Color(0xFFEAA21B),
+              borderRadius: BorderRadius.circular(8),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(name, style: const TextStyle(color: Colors.white, fontSize: 14)),
-                Text('From $price', style: const TextStyle(color: Colors.white, fontSize: 12)),
+                Text(
+                  name,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  'From $price',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 13,
+                  ),
+                ),
               ],
             ),
           ),
           const Icon(
             Icons.arrow_drop_down,
-            color: Color(0xFF4A90E2),
+            color: Color(0xFFEAA21B),
             size: 20,
           ),
         ],

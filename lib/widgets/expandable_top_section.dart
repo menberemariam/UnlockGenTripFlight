@@ -9,7 +9,7 @@ import '../screens/frequent_flyer_programs.dart';
 import '../screens/my_booking_screen.dart';
 
 class ExpandableTopBar extends StatelessWidget {
-  final HomeController controller;
+  final MiddleController controller;
 
   const ExpandableTopBar({super.key, required this.controller});
 
@@ -110,7 +110,7 @@ class _ActionButton extends StatelessWidget {
               shape: BoxShape.circle,
               color: const Color(0xFFEBF4FF),
             ),
-            child: Icon(icon, color: const Color(0xFF007AFF), size: 24),
+            child: Icon(icon, color: const Color(0xFFEAA21B), size: 24),
           ),
           const SizedBox(height: 4),
           Text(
@@ -139,7 +139,7 @@ class _ExpandableItem extends StatelessWidget {
     return GestureDetector(
       onTap: () => Get.to(route),
       child: ListTile(
-        leading: Icon(icon, color: Colors.blue, size: 16,),
+        leading: Icon(icon, color: Color(0xFFEAA21B), size: 16,),
         title: Text(title, style: const TextStyle(color: Colors.black, fontSize: 16)),
 
 

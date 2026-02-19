@@ -111,8 +111,8 @@ class MyBookingsScreen extends StatelessWidget {
                         icon: const Icon(Icons.close, size: 18),
                         label: const Text("Clear all"),
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: Colors.blue,
-                          side: const BorderSide(color: Colors.blue),
+                          foregroundColor: Color(0xFFEAA21B),
+                          side: const BorderSide(color: Color(0xFFEAA21B)),
                           padding: const EdgeInsets.symmetric(
                             horizontal: 24,
                             vertical: 12,
@@ -137,13 +137,13 @@ class MyBookingsScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(Icons.help_outline,
-                                    color: Colors.blue.shade700),
+                                    color: Color(0xFFEAA21B)),
                                 const SizedBox(width: 8),
                                 Text(
                                   "Can't find your booking?",
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
-                                    color: Colors.blue.shade800,
+                                    color: Color(0xFFEAA21B),
                                   ),
                                 ),
                               ],
@@ -156,7 +156,7 @@ class MyBookingsScreen extends StatelessWidget {
                               icon: const Icon(Icons.search, size: 18),
                               label: const Text("Search by email or PIN"),
                               style: TextButton.styleFrom(
-                                foregroundColor: Colors.blue.shade700,
+                                foregroundColor: Color(0xFFEAA21B),
                               ),
                             ),
                           ],
@@ -195,10 +195,10 @@ class _FilterChip extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isActive ? Colors.blue : Colors.white,
+          color: isActive ? Color(0xFFEAA21B) : Colors.white,
           borderRadius: BorderRadius.circular(30),
           border: Border.all(
-            color: isActive ? Colors.blue : Colors.grey.shade300,
+            color: isActive ? Color(0xFFEAA21B) : Colors.grey.shade300,
           ),
           boxShadow: isActive
               ? [

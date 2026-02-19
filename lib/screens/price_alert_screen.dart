@@ -11,7 +11,7 @@ class PriceAlertScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ctrl = Get.put(PriceAlertController());
+    final controller = Get.put(PriceAlertController());
 
     return Scaffold(
       appBar: AppBar(
@@ -39,12 +39,12 @@ class PriceAlertScreen extends StatelessWidget {
                     child: Text(
                       "Choose more dates, boost your\nchances of hitting the target price!",
                       style: TextStyle(
-                        color: Colors.blue.shade800,
+                        color: Color(0xFFEAA21B),
                         fontSize: 14,
                       ),
                     ),
                   ),
-                  const Icon(Icons.airplanemode_active, color: Colors.blue),
+                  const Icon(Icons.airplanemode_active, color: Color(0xFFEAA21B)),
                 ],
               ),
             ),
@@ -70,8 +70,8 @@ class PriceAlertScreen extends StatelessWidget {
                     child: Obx(
                           () => _TripTypeButton(
                         text: "One-way",
-                        selected: !ctrl.isRoundTrip.value,
-                        onTap: () => ctrl.toggleRoundTrip(false),
+                        selected: !controller.isRoundTrip.value,
+                        onTap: () => controller.toggleRoundTrip(false),
                       ),
                     ),
                   ),
@@ -79,8 +79,8 @@ class PriceAlertScreen extends StatelessWidget {
                     child: Obx(
                           () => _TripTypeButton(
                         text: "Round-trip",
-                        selected: ctrl.isRoundTrip.value,
-                        onTap: () => ctrl.toggleRoundTrip(true),
+                        selected: controller.isRoundTrip.value,
+                        onTap: () => controller.toggleRoundTrip(true),
                       ),
                     ),
                   ),
@@ -109,7 +109,7 @@ class PriceAlertScreen extends StatelessWidget {
                         city: "Tokyo",
                         date: "Sat, Feb 14",
                       ),
-                      const Icon(Icons.flight, color: Colors.blue, size: 32),
+                      const Icon(Icons.flight, color: Color(0xFFEAA21B), size: 32),
                       _CityDateColumn(
                         city: "Los Angeles",
                         date: "Sat, Feb 14",
@@ -124,9 +124,9 @@ class PriceAlertScreen extends StatelessWidget {
                       const Spacer(),
                       Obx(
                             () => Switch(
-                          value: ctrl.nonstop.value,
-                          onChanged: ctrl.toggleNonstop,
-                          activeColor: Colors.blue,
+                          value: controller.nonstop.value,
+                          onChanged: controller.toggleNonstop,
+                          activeColor: Color(0xFFEAA21B),
                         ),
                       ),
                     ],
@@ -151,7 +151,7 @@ class PriceAlertScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Notify me when the price is <\$ ${ctrl.alertPrice.toStringAsFixed(2)}",
+                    "Notify me when the price is <\$ ${controller.alertPrice.toStringAsFixed(2)}",
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -177,10 +177,10 @@ class PriceAlertScreen extends StatelessWidget {
                           Align(
                             alignment: Alignment(
                               // rough mapping: 718 → -0.8 , 773 → ~0.3
-                              ((ctrl.currentPrice - 700) / (800 - 700) * 2 - 1).clamp(-1.0, 1.0),
+                              ((controller.currentPrice - 700) / (800 - 700) * 2 - 1).clamp(-1.0, 1.0),
                               0,
                             ),
-                            child: const Icon(Icons.star, color: Colors.blue, size: 32),
+                            child: const Icon(Icons.star, color: Color(0xFFEAA21B), size: 32),
                           ),
                         ],
                       ),
@@ -188,10 +188,10 @@ class PriceAlertScreen extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("\$${ctrl.currentPrice.toStringAsFixed(2)}",
+                          Text("\$${controller.currentPrice.toStringAsFixed(2)}",
                               style: const TextStyle(color: Colors.green)),
-                          Text("Recommended: \$${ctrl.recommendedPrice.toStringAsFixed(2)}",
-                              style: TextStyle(color: Colors.blue.shade700)),
+                          Text("Recommended: \$${controller.recommendedPrice.toStringAsFixed(2)}",
+                              style: TextStyle(color: Color(0xFFEAA21B))),
                         ],
                       ),
                       const SizedBox(height: 4),
@@ -206,9 +206,9 @@ class PriceAlertScreen extends StatelessWidget {
                     children: [
                       Obx(
                             () => Switch(
-                          value: ctrl.emailAlerts.value,
-                          onChanged: ctrl.toggleEmail,
-                          activeColor: Colors.blue,
+                          value: controller.emailAlerts.value,
+                          onChanged: controller.toggleEmail,
+                          activeColor: Color(0xFFEAA21B),
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -220,8 +220,8 @@ class PriceAlertScreen extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        ctrl.email,
-                        style: const TextStyle(color: Colors.blue),
+                        controller.email,
+                        style: const TextStyle(color: Color(0xFFEAA21B)),
                       ),
                       const Spacer(),
                       TextButton(
@@ -240,7 +240,7 @@ class PriceAlertScreen extends StatelessWidget {
                     height: 52,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
+                        backgroundColor: Color(0xFFEAA21B),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       ),
                       onPressed: () {
@@ -264,7 +264,7 @@ class PriceAlertScreen extends StatelessWidget {
   }
 }
 
-// ──────────────────────────────────────────────── Helper Widgets ───
+// ─────────── Helper Widgets ──────────
 
 class _TripTypeButton extends StatelessWidget {
   final String text;
@@ -284,7 +284,7 @@ class _TripTypeButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 14),
         decoration: BoxDecoration(
-          color: selected ? Colors.blue : Colors.transparent,
+          color: selected ? Color(0xFFEAA21B) : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Center(

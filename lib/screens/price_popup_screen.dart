@@ -32,7 +32,7 @@ class PricePopupScreen extends StatelessWidget {
                   Expanded(
                     child: Text(
                       "Choose more dates, boost your\nchances of hitting the target price!",
-                      style: TextStyle(fontSize: 14, color: Colors.blueAccent),
+                      style: TextStyle(fontSize: 14, color: Color(0xFFEAA21B)),
                     ),
                   ),
                   Icon(Icons.check_circle, color: Colors.green),
@@ -53,7 +53,7 @@ class PricePopupScreen extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () => _showPriceAlertConfirmDialog(),
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF4081F8),
+              backgroundColor: const Color(0xFFEAA21B),
               padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             ),
@@ -132,7 +132,7 @@ class _PriceAlertConfirmDialog extends StatelessWidget {
                   // Here you would normally proceed to create the alert
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF0066FF),
+                  backgroundColor: const Color(0xFFEAA21B),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
                 child: const Text(
@@ -179,7 +179,7 @@ class _EmailSection extends StatelessWidget {
       children: [
         const Text(
           "menbereremariam123@gmail.com",
-          style: TextStyle(color: Color(0xFF4081F8), fontSize: 14),
+          style: TextStyle(color: Color(0xFFEAA21B), fontSize: 14),
         ),
         const SizedBox(width: 8),
         TextButton(

@@ -13,7 +13,7 @@ class FlightBookingMiddle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final HomeController controller = Get.put(HomeController());
+    final MiddleController controller = Get.put(MiddleController());
 
     return Column(                          // ← changed from Scaffold → Column
       mainAxisSize: MainAxisSize.min,       // ← very important in this context
@@ -24,7 +24,7 @@ class FlightBookingMiddle extends StatelessWidget {
         const TravelInspirationHeader(),
         const SizedBox(height: 8),
         const ExploreWorldSection(),
-        const SizedBox(height: 24),
+        const SizedBox(height: 2),
       ],
     );
   }

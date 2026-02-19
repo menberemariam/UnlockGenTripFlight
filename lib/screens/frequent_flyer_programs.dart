@@ -64,7 +64,7 @@ class FrequentFlyerScreen extends StatelessWidget {
                       _showAddProgramDialog(controller);
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF2E7EF6),
+                      backgroundColor: const Color(0xFFEAA21B),
                       foregroundColor: Colors.white,
                       elevation: 0,
                       shape: RoundedRectangleBorder(

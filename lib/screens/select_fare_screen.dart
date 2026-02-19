@@ -129,12 +129,12 @@ class SelectFareScreen extends StatelessWidget {
                         icon: Icons.change_circle_outlined,
                         text: "Change fee: from \$38",
                         included: true,
-                        color: Colors.blue,
+                        color: Color(0xFFEAA21B),
                       ),
                     ],
                     footer: const Text(
                       "Economy class • View details >",
-                      style: TextStyle(color: Colors.blue, fontSize: 14),
+                      style: TextStyle(color: Color(0xFFEAA21B), fontSize: 14),
                     ),
 
                     // ── Added navigation ──
@@ -153,20 +153,20 @@ class SelectFareScreen extends StatelessWidget {
                     title: "TripFlex • EasyCancel & Change",
                     price: "+\$9 /person",
                     buttonText: "Select",
-                    buttonColor: Colors.blue,
+                    buttonColor: Color(0xFFEAA21B),
                     isHighlighted: true,
                     items: const [
                       _FareItem(
                         icon: Icons.check_circle,
                         text: "Cancellation fee: Free \$50",
                         included: true,
-                        color: Colors.blue,
+                        color: Color(0xFFEAA21B),
                       ),
                       _FareItem(
                         icon: Icons.check_circle,
                         text: "Change fee: Free from \$38",
                         included: true,
-                        color: Colors.blue,
+                        color: Color(0xFFEAA21B),
                       ),
                     ],
                     note: "* Valid before departure of the first flight. Not transferable to changed flights.",
@@ -174,7 +174,7 @@ class SelectFareScreen extends StatelessWidget {
                       children: const [
                         CircleAvatar(
                           radius: 12,
-                          backgroundColor: Colors.purple,
+                          backgroundColor: Color(0xFFEAA21B),
                           child: Text("A", style: TextStyle(color: Colors.white, fontSize: 12)),
                         ),
                         SizedBox(width: 8),
@@ -252,7 +252,7 @@ class _FareOptionCard extends StatelessWidget {
     this.note,
     this.extraInfo,
     this.buttonText = "Select",
-    this.buttonColor = Colors.blue,
+    this.buttonColor = Colors.orange,
     this.isSelected = false,
     this.isHighlighted = false,
     this.onSelect,
@@ -265,7 +265,7 @@ class _FareOptionCard extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: isSelected || isHighlighted
-            ? Border.all(color: Colors.blue, width: 2)
+            ? Border.all(color: Color(0xFFEAA21B), width: 2)
             : Border.all(color: Colors.grey.shade300),
         boxShadow: isHighlighted
             ? [BoxShadow(color: Colors.teal.withOpacity(0.15), blurRadius: 10, offset: const Offset(0, 4))]
@@ -365,7 +365,7 @@ class _FareItem extends StatelessWidget {
           Icon(
             icon,
             size: 18,
-            color: included ? (color ?? Colors.blue) : Colors.red,
+            color: included ? (color ?? Color(0xFFEAA21B)) : Colors.red,
           ),
           const SizedBox(width: 8),
           Expanded(
