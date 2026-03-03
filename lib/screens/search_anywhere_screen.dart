@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../controllers/flight_search_controller.dart';
+import '../controllers/search_controllers/flight_search_controller.dart';
 
 class SearchAnyWhere extends StatelessWidget {
   const SearchAnyWhere({super.key});

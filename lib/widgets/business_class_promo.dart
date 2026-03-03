@@ -10,7 +10,7 @@ class BusinessClassPromo extends StatelessWidget {
     return GestureDetector(
       onTap: () => Get.toNamed('/business_class'),
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: const Color(0xFFDCC7A8),

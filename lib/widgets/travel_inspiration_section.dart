@@ -10,7 +10,7 @@ class TravelInspirationHeader extends StatelessWidget {
     return GestureDetector(
       onTap: () => Get.toNamed('/travel_inspiration'),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(8),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

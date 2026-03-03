@@ -8,6 +8,7 @@ class DestinationCard extends StatelessWidget {
   final String price;
   final String imageUrl;
   final Color labelColor;
+  final VoidCallback? onTap;
 
   const DestinationCard({
     super.key,
@@ -17,12 +18,13 @@ class DestinationCard extends StatelessWidget {
     required this.price,
     required this.imageUrl,
     required this.labelColor,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Get.toNamed('/destination/$name'),
+      onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         child: Row(

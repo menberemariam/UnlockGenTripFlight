@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:trip/screens/price_alert_screen.dart';
 import 'package:trip/screens/search_anywhere_screen.dart';
-import '../controllers/booking_middle_controller.dart';
+import '../controllers/booking_controllers/booking_middle_controller.dart';
 import '../screens/flight_status_screen.dart';
 import '../screens/frequent_flyer_programs.dart';
 import '../screens/my_booking_screen.dart';
@@ -19,7 +19,7 @@ class ExpandableTopBar extends StatelessWidget {
       children: [
         Obx(
               () => Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               color: Colors.white,

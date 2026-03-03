@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../controllers/booking_middle_controller.dart';
+import '../controllers/booking_controllers/booking_middle_controller.dart';
 import '../screens/flight_result_screen.dart';
 import 'destination_card.dart';
 import '../screens/more_flights_screen.dart';
@@ -14,7 +14,7 @@ class ExploreWorldSection extends StatelessWidget {
     final controller = Get.find<MiddleController>();
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [Color(0xFFF3CC84), Color(0xFFEDB853)],
@@ -110,7 +110,7 @@ class ExploreWorldSection extends StatelessWidget {
     required Color labelColor,
   }) {
     return Container(
-      width: 260, // increased from 220 → better text/image balance
+      width: 260,
       margin: const EdgeInsets.only(left: 8, right: 12, bottom: 16),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -126,6 +126,7 @@ class ExploreWorldSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Section header
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 12, 8),
             child: Row(
@@ -139,38 +140,41 @@ class ExploreWorldSection extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                IconButton(
-                  icon: const Icon(
-                    Icons.bookmark_add_outlined,
-                    color: Color(0xFFEAA21B),
-                    size: 24,
-                  ),
-                  onPressed: () {
-                    Get.to(() => const FlightResultsScreen());
-                  },
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                ),
               ],
             ),
           ),
 
-          // Cards
+          // Tappable destination cards
           ...data.asMap().entries.map((entry) {
             final idx = entry.key;
             final item = entry.value;
 
-            return DestinationCard(
-              index: idx + 1,
-              name: item['name'] ?? 'Unknown',
-              date: item['date'] ?? '—',
-              price: item['price'] ?? 'N/A',
-              imageUrl: item['image'] ?? '',
-              labelColor: labelColor,
+            return GestureDetector(
+              onTap: () {
+                // Navigate to flight results with the selected destination
+                Get.to(
+                      () => const FlightResultsScreen(),
+                  arguments: item, // Pass the whole item for details
+                );
+              },
+              child: DestinationCard(
+                index: idx + 1,
+                name: item['name'] ?? 'Unknown',
+                date: item['date'] ?? '—',
+                price: item['price'] ?? 'N/A',
+                imageUrl: item['image'] ?? '',
+                labelColor: labelColor,
+                onTap: () {
+                  Get.to(
+                        () => const FlightResultsScreen(),
+                    arguments: item,
+                  );
+                },
+              ),
             );
           }).toList(),
 
-          // View more
+          // View more link
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 1),
             child: GestureDetector(
@@ -196,6 +200,7 @@ class ExploreWorldSection extends StatelessWidget {
   }
 }
 
+// City chip widget (unchanged, but kept for completeness)
 class _CityChip extends StatelessWidget {
   final String name;
   final String price;

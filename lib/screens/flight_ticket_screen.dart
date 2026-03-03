@@ -5,7 +5,7 @@ import 'package:trip/screens/seat_screen.dart';
 
 const Color kAccentColor = Color(0xFFEAA21B);
 
-class FlightBookingController extends GetxController {
+class BookingController extends GetxController {
   final box = GetStorage();
 
   // Contact
@@ -55,7 +55,7 @@ class FlightTicketScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ctrl = Get.put(FlightBookingController());
+    final ctrl = Get.put(BookingController());
 
     final theme = Theme.of(context).copyWith(
       primaryColor: kAccentColor,
@@ -243,7 +243,7 @@ class FlightTicketScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPassengerForm(FlightBookingController ctrl, ThemeData theme) {
+  Widget _buildPassengerForm(BookingController ctrl, ThemeData theme) {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -356,7 +356,7 @@ class FlightTicketScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildGenderTile(FlightBookingController ctrl, String value, ThemeData theme) {
+  Widget _buildGenderTile(BookingController ctrl, String value, ThemeData theme) {
     final selected = ctrl.gender.value == value;
     return GestureDetector(
       onTap: () => ctrl.gender.value = value,
@@ -425,7 +425,7 @@ class FlightTicketScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildContactSection(FlightBookingController ctrl, ThemeData theme) {
+  Widget _buildContactSection(BookingController ctrl, ThemeData theme) {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -474,7 +474,7 @@ class FlightTicketScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomPriceBar(FlightBookingController ctrl, ThemeData theme) {
+  Widget _buildBottomPriceBar(BookingController ctrl, ThemeData theme) {
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
       decoration: BoxDecoration(

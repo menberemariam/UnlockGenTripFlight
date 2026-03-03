@@ -9,33 +9,31 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.8
-  get: ^4.6.6  
-  get_storage: ^2.1.1
-  shimmer: ^3.0.0
 
+  cupertino_icons: ^1.0.8
+  get: ^4.6.6
+  table_calendar: ^3.0.9
+  provider: ^6.0.5
+  intl: ^0.18.1
+  get_storage: ^2.0.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
-  # Move this to the same level as flutter_test
   flutter_native_splash: ^2.4.0
 
-# Add this at the bottom level (not indented)
 flutter_native_splash:
-  color: "#1E5EFF"                     # Blue background
-  image: assets/icons/splash_logo.jpg  # Your JPG text image
+  color: "#EAA21B"
+  image: assets/icons/habesha_logo.jpg
   android: true
   ios: true
   android_12:
-    color: "#1E5EFF"
-    image: assets/icons/splash_logo.jpg
+    color: "#EAA21B"
+    image: assets/icons/habesha_logo.jpg
   fullscreen: true
-
 
 flutter:
   uses-material-design: true
   assets:
     - assets/icons/
-    - assets/images/
