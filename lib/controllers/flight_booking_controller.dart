@@ -3,22 +3,70 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../screens/calender_screen/full_calendar_screen.dart';
 import '../screens/city_screen/city_search_screen.dart';
+import '../model/flight.dart';
 
-class FlightBookingController extends GetxController with GetSingleTickerProviderStateMixin {
-  var departureCity = 'London'.obs;
-  var destinationCity = 'Bangkok'.obs;
-  var multiCityDepartures = <String>['London', 'Bangkok'].obs;
-  var multiCityArrivals = <String>['Bangkok', 'Tokyo'].obs;
+class FlightBookingController extends GetxController
+    with GetSingleTickerProviderStateMixin {
+
+  var departureCity = 'Dubai'.obs;
+  var destinationCity = 'Addis Ababa'.obs;
+
+  var multiCityDepartures = <String>['Dubai', 'Addis Ababa'].obs;
+  var multiCityArrivals = <String>['Addis Ababa', 'Dubai'].obs;
+
   var multiCityDates = <DateTime>[
     DateTime.now(),
     DateTime.now().add(const Duration(days: 3)),
-  ]
-      .obs;
-  var selectedDate = DateTime.now().obs;
-  var rangeStart = Rxn<DateTime>();
-  var rangeEnd = Rxn<DateTime>();
+  ].obs;
 
-  // For One-Way and Round-Trip
+  var selectedDate = DateTime.now().add(const Duration(days: 1)).obs;
+  var rangeStart = Rxn<DateTime>()..value = DateTime.now().add(const Duration(days: 1));
+  var rangeEnd = Rxn<DateTime>()..value = DateTime.now().add(const Duration(days: 8));
+  var selectedTripType = 1.obs;
+
+  bool get isOneWay => selectedTripType.value == 0;
+  bool get isRoundTrip => selectedTripType.value == 1;
+  bool get isMultiCity => selectedTripType.value == 2;
+
+  void setTripType(int index) {
+    selectedTripType.value = index;
+    clearFlightSelection();
+  }
+
+
+  // ROUND TRIP STATE
+
+
+  var outboundFlights = <Flight>[].obs;
+  var returnFlights = <Flight>[].obs;
+
+  Rxn<Flight> selectedOutboundFlight = Rxn<Flight>();
+  Rxn<Flight> selectedReturnFlight = Rxn<Flight>();
+
+  double get totalPrice {
+    final outbound = selectedOutboundFlight.value?.price ?? 0;
+    final inbound = selectedReturnFlight.value?.price ?? 0;
+    return outbound + inbound;
+  }
+
+
+  double get oneWayPrice {
+    return selectedOutboundFlight.value?.price ?? 0;
+  }
+
+
+  // 🆕 FINAL PAYABLE PRICE (NEW)
+
+
+  double get finalPrice {
+    if (isRoundTrip) return totalPrice;
+    return oneWayPrice;
+  }
+
+
+  // CITY SWAP
+
+
   void swapCities() {
     String temp = departureCity.value;
     departureCity.value = destinationCity.value;
@@ -32,6 +80,7 @@ class FlightBookingController extends GetxController with GetSingleTickerProvide
     multiCityDepartures.refresh();
     multiCityArrivals.refresh();
   }
+
   Future<void> selectCity(bool isDeparture) async {
     final result = await Get.to(() => const CitySearchScreen());
     if (result != null && result is String) {
@@ -42,6 +91,7 @@ class FlightBookingController extends GetxController with GetSingleTickerProvide
       }
     }
   }
+
   Future<void> selectMultiCity(int index, bool isDeparture) async {
     final result = await Get.to(() => const CitySearchScreen());
     if (result != null && result is String) {
@@ -52,20 +102,46 @@ class FlightBookingController extends GetxController with GetSingleTickerProvide
       }
     }
   }
+
+
+  // MULTI CITY ADD / REMOVE
+
+
   void addFlight() {
-    if (multiCityDepartures.length < 5) {
-      multiCityDepartures.add(multiCityArrivals.last);
-      multiCityArrivals.add('Select City');
-      multiCityDates.add(multiCityDates.last.add(const Duration(days: 2)));
+    if (multiCityDepartures.length >= 5) {
+      Get.snackbar(
+        "Limit Reached",
+        "You can add maximum 5 flights",
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
     }
+
+    multiCityDepartures.add(multiCityArrivals.last);
+    multiCityArrivals.add('Select City');
+    multiCityDates.add(
+      multiCityDates.last.add(const Duration(days: 2)),
+    );
   }
+
   void removeFlight(int index) {
-    if (multiCityDepartures.length > 2) {
-      multiCityDepartures.removeAt(index);
-      multiCityArrivals.removeAt(index);
-      multiCityDates.removeAt(index);
+    if (multiCityDepartures.length <= 2) {
+      Get.snackbar(
+        "Minimum Required",
+        "At least 2 flights are required",
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
     }
+
+    multiCityDepartures.removeAt(index);
+    multiCityArrivals.removeAt(index);
+    multiCityDates.removeAt(index);
   }
+
+
+  // CALENDAR
+
 
   void goToCalendar() async {
     final DateTime? result = await Get.to(() => FullCalendarScreen(
@@ -86,6 +162,7 @@ class FlightBookingController extends GetxController with GetSingleTickerProvide
       rangeEnd.value = result['end'];
     }
   }
+
   void goToMultiCityCalendar(int index) async {
     final DateTime? result = await Get.to(() => FullCalendarScreen(
       initialStart: multiCityDates[index],
@@ -93,16 +170,51 @@ class FlightBookingController extends GetxController with GetSingleTickerProvide
     ));
     if (result != null) multiCityDates[index] = result;
   }
-  Widget buildLocationField({required IconData icon, required String label, bool isPlaceholder = false}) {
+
+
+  // LOAD ROUND TRIP FLIGHTS
+
+
+  void loadRoundTripFlights() {
+    selectedOutboundFlight.value = null;
+    selectedReturnFlight.value = null;
+  }
+
+  void clearFlightSelection() {
+    selectedOutboundFlight.value = null;
+    selectedReturnFlight.value = null;
+  }
+
+  // VALIDATION BEFORE PASSENGER PAGE
+
+
+  bool canContinueToPassenger() {
+    if (isRoundTrip) {
+      return selectedOutboundFlight.value != null &&
+          selectedReturnFlight.value != null;
+    } else {
+      return selectedOutboundFlight.value != null;
+    }
+  }
+  // UI HELPERS (UNCHANGED)
+
+  Widget buildLocationField({
+    required IconData icon,
+    required String label,
+    bool isPlaceholder = false,
+  }) {
     return Row(
       children: [
         Icon(icon, color: Colors.grey[700]),
         const SizedBox(width: 12),
-        Text(label, style: TextStyle(
+        Text(
+          label,
+          style: TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w500,
-            color: isPlaceholder ? Colors.grey[400] : Colors.black
-        )),
+            color: isPlaceholder ? Colors.grey[400] : Colors.black,
+          ),
+        ),
       ],
     );
   }
@@ -128,21 +240,32 @@ class FlightBookingController extends GetxController with GetSingleTickerProvide
               border: Border.all(color: Colors.grey[300]!),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: const Icon(Icons.swap_vert, color: Color(0xFFFFC107), size: 20),
+            child: const Icon(
+              Icons.swap_vert,
+              color: Color(0xFFFFC107),
+              size: 20,
+            ),
           ),
         ),
       ],
     );
   }
 
-  Widget buildDividerField() => const Divider(color: Colors.grey, thickness: 0.3);
+  Widget buildDividerField() =>
+      const Divider(color: Colors.grey, thickness: 0.3);
+
+
   late AnimationController animationController;
   final PageController pageController = PageController();
 
   @override
   void onInit() {
     super.onInit();
-    animationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+    loadRoundTripFlights();
   }
 
   @override
