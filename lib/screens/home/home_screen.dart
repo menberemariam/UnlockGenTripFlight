@@ -66,7 +66,7 @@ class HomeScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
+                            color: Colors.black.withValues(alpha: 0.05),
                             blurRadius: 10,
                             offset: const Offset(0, 2),
                           ),
@@ -192,16 +192,16 @@ class HomeScreen extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          _buildCityLink('London'),
-                          _buildCityLink('Paris'),
-                          _buildCityLink('New York'),
-                          _buildCityLink('Tokyo'),
+                          _buildCityLink('Dubai'),
+                          _buildCityLink('Addis Ababa'),
+                          _buildCityLink('Nairobi'),
+                          _buildCityLink('Doha'),
                           Row(
                             children: const [
-                              Icon(Icons.map, color: Color(0xFFFFD700), size: 18),
+                              Icon(Icons.flight, color: Color(0xFFFFD700), size: 18),
                               SizedBox(width: 4),
                               Text(
-                                'Map',
+                                'Routes',
                                 style: TextStyle(
                                   color: Color(0xFFB8860B),
                                   fontSize: 14,
@@ -358,7 +358,7 @@ class HomeScreen extends StatelessWidget {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         const Text(
-                                          'Trip.com',
+                                          'Habesha Wings',
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 18,
@@ -367,7 +367,7 @@ class HomeScreen extends StatelessWidget {
                                         ),
                                         const SizedBox(height: 8),
                                         const Text(
-                                          'EXPLORE\nCULTURAL\nTOURISM\nIN HENGQIN',
+                                          'FLY DIRECT\nDUBAI TO\nADDIS ABABA\nFROM €475',
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 24,
@@ -606,7 +606,7 @@ class HomeScreen extends StatelessWidget {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, -2),
           ),

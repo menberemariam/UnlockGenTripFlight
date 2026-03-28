@@ -90,7 +90,7 @@ class _FlightBookingScreenState extends State<FlightBookingScreen>
     super.dispose();
   }
 
-  int _selectedTab = 0;
+  int _selectedTab = 1; // Default to Round-trip to match controller
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +138,7 @@ class _FlightBookingScreenState extends State<FlightBookingScreen>
                             child: Container(
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.3),
+                                color: Colors.black.withValues(alpha: 0.3),
                                 shape: BoxShape.circle,
                               ),
                               child: const Icon(
@@ -172,7 +172,7 @@ class _FlightBookingScreenState extends State<FlightBookingScreen>
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                             decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.5),
+                              color: Colors.black.withValues(alpha: 0.5),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Text(
@@ -204,7 +204,7 @@ class _FlightBookingScreenState extends State<FlightBookingScreen>
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
+                            color: Colors.black.withValues(alpha: 0.05),
                             blurRadius: 10,
                             offset: const Offset(0, 2),
                           ),
@@ -251,7 +251,7 @@ class _FlightBookingScreenState extends State<FlightBookingScreen>
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
             colors: [
-              const Color(0xFFD4AF37).withOpacity(0.9),
+              const Color(0xFFD4AF37).withValues(alpha: 0.9),
               Colors.transparent,
             ],
           ),
@@ -313,6 +313,8 @@ class _FlightBookingScreenState extends State<FlightBookingScreen>
           setState(() {
             _selectedTab = index;
           });
+          // Update the controller's trip type
+          controller.setTripType(index);
         },
         child: Column(
           children: [

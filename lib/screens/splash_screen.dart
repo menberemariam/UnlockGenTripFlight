@@ -16,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _navigateToHome() async {
-    await Future.delayed(const Duration(milliseconds: 100));
+    await Future.delayed(const Duration(seconds: 3));
     if (mounted) {
       Get.offNamed('/home');
     }
