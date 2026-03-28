@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/passenger_controller.dart';
-import '../widgets/passenger_form_widgets.dart';
+import '../../controllers/passenger_controller.dart';
+import '../../widgets/passenger_form_widgets.dart';
 
 class AddPassengerScreen extends StatelessWidget {
   final Map<String, String>? existingPassenger;

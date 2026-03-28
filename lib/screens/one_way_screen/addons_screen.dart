@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:get/get.dart';
-import '../providers/booking_provider.dart';
+import '../../providers/booking_provider.dart';
+import '../../controllers/flight_booking_controller.dart';
+import '../../controllers/flight_search_controller.dart';
 
 class AddonsScreen extends StatefulWidget {
   const AddonsScreen({super.key});
@@ -17,6 +19,8 @@ class _AddonsScreenState extends State<AddonsScreen> {
   Widget build(BuildContext context) {
     final bookingProvider = context.watch<BookingProvider>();
     final fare = bookingProvider.bookingData.selectedFare;
+    final flightController = Get.find<FlightBookingController>();
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text('Select seat'),
@@ -30,12 +34,96 @@ class _AddonsScreenState extends State<AddonsScreen> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
+                  _buildFlightSummary(flightController),
                   if (showSeatMap) _buildSeatMap() else _buildAddonsOptions(),
                 ],
               ),
             ),
           ),
           _buildBottomBar(context, fare),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFlightSummary(FlightBookingController flightController) {
+    final isRoundTrip = flightController.isRoundTrip;
+    final departure = flightController.selectedOutboundFlight.value;
+    final returnFlight = flightController.selectedReturnFlight.value;
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      color: const Color(0xFFFFF8E6),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.flight_takeoff, color: Color(0xFFEAA21B)),
+              const SizedBox(width: 8),
+              Text(
+                isRoundTrip ? 'Round Trip' : 'One Way',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          
+          // Departure Flight Info
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '${flightController.departureCity.value} → ${flightController.destinationCity.value}',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              if (departure != null)
+                Text(
+                  '${departure.departureTime} - ${departure.arrivalTime}',
+                  style: TextStyle(color: Colors.grey.shade700),
+                ),
+            ],
+          ),
+          
+          if (departure != null) ...[
+            const SizedBox(height: 4),
+            Text(
+              '${departure.airline} • ${departure.duration}',
+              style: TextStyle(color: Colors.grey.shade700, fontSize: 13),
+            ),
+          ],
+
+          // Return Flight Info (only for round trip)
+          if (isRoundTrip && returnFlight != null) ...[
+            const Divider(height: 20, thickness: 1),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '${flightController.destinationCity.value} → ${flightController.departureCity.value}',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  '${returnFlight.departureTime} - ${returnFlight.arrivalTime}',
+                  style: TextStyle(color: Colors.grey.shade700),
+                ),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Text(
+              '${returnFlight.airline} • ${returnFlight.duration}',
+              style: TextStyle(color: Colors.grey.shade700, fontSize: 13),
+            ),
+          ],
         ],
       ),
     );
@@ -253,6 +341,13 @@ class _AddonsScreenState extends State<AddonsScreen> {
   }
 
   Widget _buildBottomBar(BuildContext context, fare) {
+    final searchCtrl = Get.find<FlightSearchController>();
+    final total = searchCtrl.totalDisplayPrice;
+    final currency = searchCtrl.displayCurrency;
+    final displayPrice = total > 0
+        ? '$currency ${total.toStringAsFixed(2)}'
+        : '£${fare?.price.toStringAsFixed(2) ?? '0.00'}';
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -279,7 +374,7 @@ class _AddonsScreenState extends State<AddonsScreen> {
               Row(
                 children: [
                   Text(
-                    '£${fare?.price.toStringAsFixed(2) ?? '0.00'}',
+                    displayPrice,
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,

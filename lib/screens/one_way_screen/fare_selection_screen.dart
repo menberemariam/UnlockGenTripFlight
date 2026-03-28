@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:get/get.dart';
-import '../data/mock_data.dart';
-import '../providers/booking_provider.dart';
+import '../../controllers/flight_search_controller.dart';
 import 'passenger_info_screen.dart';
 
 class FareSelectionScreen extends StatelessWidget {
@@ -11,10 +9,8 @@ class FareSelectionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bookingProvider = context.watch<BookingProvider>();
-    final flight = bookingProvider.bookingData.selectedFlight;
-    final searchParams = bookingProvider.bookingData.searchParams;
-    final fareTypes = MockData.getFareTypes();
+    final searchCtrl = Get.find<FlightSearchController>();
+    final offer = searchCtrl.selectedOffer.value;
 
     return Scaffold(
       appBar: AppBar(
@@ -28,9 +24,9 @@ class FareSelectionScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildFlightInfo(flight, searchParams),
+            _buildFlightInfo(offer),
             _buildWarningMessage(),
-            _buildFareSelector(context, fareTypes),
+            _buildFareSelector(context, searchCtrl),
             _buildInfoBanner(),
           ],
         ),
@@ -38,18 +34,28 @@ class FareSelectionScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFlightInfo(flight, searchParams) => Container(
+  Widget _buildFlightInfo(offer) {
+    if (offer == null) {
+      return const Padding(
+        padding: EdgeInsets.all(16),
+        child: Text('No flight selected'),
+      );
+    }
+    final seg = offer.firstSegment;
+    return Container(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '${DateFormat('EEE, MMM dd').format(searchParams?.date ?? DateTime.now())}  ${flight?.duration ?? ''}',
+            seg?.departureDateTime != null
+                ? DateFormat('EEE, MMM dd').format(seg!.departureDateTime!)
+                : '',
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Text(
-            'Please pay attention to your departure date and arrive at the airport in advance on Fri, Feb 27',
+            'Please pay attention to your departure date and arrive at the airport in advance.',
             style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
           ),
           const SizedBox(height: 16),
@@ -58,13 +64,7 @@ class FareSelectionScreen extends StatelessWidget {
               Container(
                 width: 4,
                 height: 60,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [Colors.grey.shade400, Colors.grey.shade400],
-                  ),
-                ),
+                color: Colors.grey.shade400,
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -72,40 +72,17 @@ class FareSelectionScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${flight?.departureTime ?? ''}  ${flight?.departureCode ?? ''} Mumbai Chhatrapati Shivaji Maharaj Intl. T2',
+                      '${offer.departureTime}  ${offer.originCode}  ${seg?.departureAirportName ?? ''}',
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Text(
-                          '— ${flight?.airline ?? ''}',
-                          style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          'VZ761',
-                          style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          flight?.aircraft ?? '',
-                          style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
-                        ),
-                      ],
-                    ),
-                    TextButton.icon(
-                      onPressed: () {},
-                      icon: const Icon(Icons.eco, size: 14),
-                      label: const Text('CO2e', style: TextStyle(fontSize: 12)),
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        minimumSize: const Size(0, 0),
-                      ),
+                    Text(
+                      '— ${offer.airlineName}  ${seg?.flightNumber ?? ''}',
+                      style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      '${flight?.arrivalTime ?? ''}  ${flight?.arrivalCode ?? ''} Bangkok Suvarnabhumi',
+                      '${offer.arrivalTime}  ${offer.destinationCode}  ${offer.outboundFlight?.segments.last.arrivalAirportName ?? ''}',
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -116,6 +93,7 @@ class FareSelectionScreen extends StatelessWidget {
         ],
       ),
     );
+  }
 
   Widget _buildWarningMessage() {
     return Container(
@@ -142,23 +120,19 @@ class FareSelectionScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFareSelector(BuildContext context, List fareTypes) {
+  Widget _buildFareSelector(BuildContext context, FlightSearchController searchCtrl) {
     return Container(
       margin: const EdgeInsets.all(16),
       child: Column(
         children: [
           Row(
             children: [
-              Expanded(
-                child: _buildFareTab('Economy', true),
-              ),
-              Expanded(
-                child: _buildFareTab('Premium Economy', false),
-              ),
+              Expanded(child: _buildFareTab('Economy', true)),
+              Expanded(child: _buildFareTab('Premium Economy', false)),
             ],
           ),
           const SizedBox(height: 16),
-          ...fareTypes.map((fare) => _buildFareCard(context, fare)),
+          _buildFareCard(context, searchCtrl),
         ],
       ),
     );
@@ -170,7 +144,7 @@ class FareSelectionScreen extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color: selected ? Color(0xFF9B8E35) : Colors.transparent,
+            color: selected ? const Color(0xFF9B8E35) : Colors.transparent,
             width: 2,
           ),
         ),
@@ -185,7 +159,15 @@ class FareSelectionScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFareCard(BuildContext context, fare) {
+  Widget _buildFareCard(BuildContext context, FlightSearchController searchCtrl) {
+    final offer = searchCtrl.selectedOffer.value;
+    if (offer == null) return const SizedBox.shrink();
+
+    final price = offer.pricing.total;
+    final currency = offer.pricing.currency;
+    final features = offer.priceClassDescriptions;
+    final baggage = offer.baggageServices;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(16),
@@ -203,51 +185,57 @@ class FareSelectionScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '£${fare.price.toInt()}',
+                    '$currency ${price.toStringAsFixed(0)}',
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: Color(0xFF9B8E35),
                     ),
                   ),
-                  const Text(
-                    '/person',
-                    style: TextStyle(color: Colors.grey),
-                  ),
+                  const Text('/person', style: TextStyle(color: Colors.grey)),
                 ],
               ),
-              ElevatedButton(
-                onPressed: () {
-                  context.read<BookingProvider>().selectFare(fare);
-                  Get.to(() => const PassengerInfoScreen());
-                },
+              Obx(() => ElevatedButton(
+                onPressed: searchCtrl.isLoading.value
+                    ? null
+                    : () async {
+                        final ok = await searchCtrl.priceOffer(offer);
+                        if (ok) {
+                          Get.to(() => const PassengerInfoScreen());
+                        } else {
+                          Get.snackbar('Error', searchCtrl.errorMessage.value,
+                              snackPosition: SnackPosition.BOTTOM);
+                        }
+                      },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFFFFC107),
+                  backgroundColor: const Color(0xFFFFC107),
                   padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                 ),
-                child: const Text('Select', style: TextStyle(color: Colors.black)),
-              ),
+                child: searchCtrl.isLoading.value
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black),
+                      )
+                    : const Text('Select', style: TextStyle(color: Colors.black)),
+              )),
             ],
           ),
           const SizedBox(height: 16),
-          _buildFareFeature(Icons.shopping_bag, 'Personal item: Included', Color(0xFFEAA21B)),
-          _buildFareFeature(Icons.work_outline, 'Carry-on baggage: 1 piece', Color(0xFFEAA21B)),
-          _buildFareFeature(Icons.luggage, 'Checked baggage: ${fare.checkedBag}',Color(0xFFEAA21B)),
-          _buildFareFeature(
-            Icons.close,
-            fare.refundable ? 'Refundable' : 'Non-refundable',
-            fare.refundable ? Color(0xFFEAA21B) : Colors.red,
-          ),
-          _buildFareFeature(Icons.sync, 'Change fee: ${fare.changeFee}', Color(0xFFEAA21B)),
-          ...fare.benefits.map((benefit) => _buildFareFeature(
-                Icons.check,
-                benefit,
-            Color(0xFFEAA21B),
-              )),
+          // Baggage info from API
+          if (baggage.isNotEmpty)
+            _buildFareFeature(Icons.luggage, baggage.first.description, const Color(0xFFEAA21B)),
+          // Price class features from API
+          ...features.map((f) => _buildFareFeature(Icons.check, f.descText, const Color(0xFFEAA21B))),
+          // Fallback features if API returns none
+          if (features.isEmpty) ...[
+            _buildFareFeature(Icons.shopping_bag, 'Personal item: Included', const Color(0xFFEAA21B)),
+            _buildFareFeature(Icons.work_outline, 'Carry-on baggage: 1 piece', const Color(0xFFEAA21B)),
+          ],
           const SizedBox(height: 8),
-          TextButton(
-            onPressed: () {},
-            child: Text('${fare.name} | View details'),
+          Text(
+            offer.priceClassName.isNotEmpty ? offer.priceClassName : 'Economy',
+            style: const TextStyle(color: Color(0xFF9B8E35), fontWeight: FontWeight.w600),
           ),
         ],
       ),
@@ -261,12 +249,7 @@ class FareSelectionScreen extends StatelessWidget {
         children: [
           Icon(icon, size: 18, color: color),
           const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              text,
-              style: TextStyle(color: Colors.grey.shade700),
-            ),
-          ),
+          Expanded(child: Text(text, style: TextStyle(color: Colors.grey.shade700))),
         ],
       ),
     );
