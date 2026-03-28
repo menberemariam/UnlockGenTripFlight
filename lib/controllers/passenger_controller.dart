@@ -8,6 +8,7 @@ class PassengerController extends GetxController {
   final surnameController = TextEditingController();
   final nationalityController = TextEditingController();
   final dobController = TextEditingController();
+  final passportController = TextEditingController();
 
   final selectedGender = Rx<String?>(null);
   final showFrequentFlyer = false.obs;
@@ -33,6 +34,7 @@ class PassengerController extends GetxController {
       selectedGender.value = existingPassenger['gender'];
       nationalityController.text = existingPassenger['nationality'] ?? '';
       dobController.text = existingPassenger['dob'] ?? '';
+      passportController.text = existingPassenger['passport'] ?? '';
     }
   }
 
@@ -91,6 +93,7 @@ class PassengerController extends GetxController {
       'gender': selectedGender.value!,
       'nationality': nationalityController.text,
       'dob': dobController.text,
+      'passport': passportController.text,
       'index': passengerIndex?.toString() ?? '',
     };
   }
@@ -101,6 +104,7 @@ class PassengerController extends GetxController {
     surnameController.dispose();
     nationalityController.dispose();
     dobController.dispose();
+    passportController.dispose();
     super.onClose();
   }
 }
