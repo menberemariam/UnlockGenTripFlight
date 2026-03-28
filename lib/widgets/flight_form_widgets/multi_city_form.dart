@@ -94,7 +94,43 @@ class MultiCityForm extends StatelessWidget {
           flightController.buildDividerField(),
           PassengersClassWidget(controller: passengersController),
           const SizedBox(height: 20),
-          SearchButtonWidget(onPressed: () {}),
+          SearchButtonWidget(onPressed: () {
+            for (int i = 0; i < flightController.multiCityDepartures.length; i++) {
+              final from = flightController.multiCityDepartures[i].trim();
+              final to = flightController.multiCityArrivals[i].trim();
+              final leg = i + 1;
+
+              if (from.isEmpty) {
+                Get.snackbar('Required', 'Flight $leg: please select a departure city',
+                    snackPosition: SnackPosition.BOTTOM,
+                    backgroundColor: const Color(0xFFFFEBEE),
+                    colorText: const Color(0xFFD32F2F));
+                return;
+              }
+              if (to.isEmpty) {
+                Get.snackbar('Required', 'Flight $leg: please select a destination city',
+                    snackPosition: SnackPosition.BOTTOM,
+                    backgroundColor: const Color(0xFFFFEBEE),
+                    colorText: const Color(0xFFD32F2F));
+                return;
+              }
+              if (from == to) {
+                Get.snackbar('Invalid', 'Flight $leg: departure and destination cannot be the same',
+                    snackPosition: SnackPosition.BOTTOM,
+                    backgroundColor: const Color(0xFFFFEBEE),
+                    colorText: const Color(0xFFD32F2F));
+                return;
+              }
+            }
+            // Navigate to one-way results using first leg
+            Get.find<FlightBookingController>().departureCity.value =
+                flightController.multiCityDepartures.first;
+            Get.find<FlightBookingController>().destinationCity.value =
+                flightController.multiCityArrivals.first;
+            Get.find<FlightBookingController>().selectedDate.value =
+                flightController.multiCityDates.first;
+            Get.toNamed('/results');
+          }),
           const SizedBox(height: 10),
           const RecentSearchWidget(),
         ],

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import '../screens/add_passenger_screen.dart';
 
 class PassengerCard extends StatelessWidget {
   final String name;
@@ -243,6 +241,7 @@ class ContactFormFields extends StatelessWidget {
 class BookingBottomBar extends StatelessWidget {
   final int passengerCount;
   final double totalPrice;
+  final String currency;
   final VoidCallback onContinue;
 
   const BookingBottomBar({
@@ -250,6 +249,7 @@ class BookingBottomBar extends StatelessWidget {
     required this.passengerCount,
     required this.totalPrice,
     required this.onContinue,
+    this.currency = 'EUR',
   });
 
   @override
@@ -280,7 +280,7 @@ class BookingBottomBar extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    '£${totalPrice.toStringAsFixed(2)}',
+                    '$currency ${totalPrice.toStringAsFixed(2)}',
                     style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(width: 4),
@@ -289,23 +289,16 @@ class BookingBottomBar extends StatelessWidget {
               ),
             ],
           ),
-          Stack(
-            clipBehavior: Clip.none,
-            children: [
-              ElevatedButton(
-                onPressed: onContinue,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFFFFC107)
-                  ,
-                  padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
-                ),
-                child: const Text(
-                  'Continue',
-                  style: TextStyle(fontSize: 16, color: Colors.white),
-                ),
-              ),
-              
-            ],
+          ElevatedButton(
+            onPressed: onContinue,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFFFC107),
+              padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
+            ),
+            child: const Text(
+              'Continue',
+              style: TextStyle(fontSize: 16, color: Colors.white),
+            ),
           ),
         ],
       ),

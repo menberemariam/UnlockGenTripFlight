@@ -158,10 +158,13 @@ class InsuranceOption extends StatelessWidget {
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
-                  Radio<String>(
-                    value: value,
-                    groupValue: controller.selectedInsurance.value,
-                    onChanged: (val) => controller.selectInsurance(val!),
+                  Icon(
+                    isSelected
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_unchecked,
+                    color: isSelected
+                        ? const Color(0xFFFFC107)
+                        : Colors.grey,
                   ),
                 ],
               ),

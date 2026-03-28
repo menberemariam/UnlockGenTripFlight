@@ -107,6 +107,12 @@ class PassengerFormFields extends StatelessWidget {
           NationalityField(controller: controller),
           const SizedBox(height: 16),
           DateOfBirthField(controller: controller),
+          const SizedBox(height: 16),
+          _buildTextField(
+            label: 'Passport Number *',
+            controller: controller.passportController,
+            hint: 'e.g. A12345678',
+          ),
         ],
       ),
     );
@@ -182,11 +188,11 @@ class GenderSelector extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Radio<String>(
-                value: gender,
-                groupValue: controller.selectedGender.value,
-                onChanged: (value) => controller.selectGender(value!),
+              Icon(
+                isSelected ? Icons.radio_button_checked : Icons.radio_button_unchecked,
+                color: isSelected ? Colors.blue : Colors.grey,
               ),
+              const SizedBox(width: 8),
               Text(
                 gender,
                 style: TextStyle(
@@ -245,69 +251,80 @@ class NationalityField extends StatelessWidget {
   }
 
   void _showNationalityPicker(BuildContext context) {
+    List<Map<String, String>> filtered = List.from(CountriesData.countries);
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.7,
-        minChildSize: 0.5,
-        maxChildSize: 0.95,
-        expand: false,
-        builder: (context, scrollController) => Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(color: Colors.grey.shade200)),
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setState) => SizedBox(
+          height: MediaQuery.of(ctx).size.height * 0.85,
+          child: Column(
+            children: [
+              const SizedBox(height: 12),
+              Container(
+                width: 40, height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(2),
+                ),
               ),
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () => Navigator.pop(context),
+              const SizedBox(height: 12),
+              const Text('Select Nationality',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 12),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: TextField(
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    hintText: 'Search country, code or dial...',
+                    prefixIcon: const Icon(Icons.search),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   ),
-                  const Expanded(
-                    child: Text(
-                      'Select Nationality',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  const SizedBox(width: 48),
-                ],
+                  onChanged: (q) => setState(() {
+                    final lower = q.toLowerCase();
+                    filtered = CountriesData.countries.where((c) =>
+                      (c['name'] ?? '').toLowerCase().contains(lower) ||
+                      (c['code'] ?? '').toLowerCase().contains(lower) ||
+                      (c['dial'] ?? '').contains(q)
+                    ).toList();
+                  }),
+                ),
               ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                controller: scrollController,
-                itemCount: CountriesData.countries.length,
-                itemBuilder: (context, index) {
-                  final country = CountriesData.countries[index];
-                  final isSelected = controller.nationalityController.text == country;
-                  return ListTile(
-                    leading: Text(country.split(' ')[0], style: const TextStyle(fontSize: 24)),
-                    title: Text(
-                      country.substring(country.indexOf(' ') + 1),
-                      style: TextStyle(
-                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                        color: isSelected ? Color(0xFFFFC107)
-                            : Colors.black,
-                      ),
-                    ),
-                    trailing: isSelected ? const Icon(Icons.check, color: Color(0xFFFFC107)
-                    ) : null,
-                    onTap: () {
-                      controller.selectNationality(country);
-                      Navigator.pop(context);
-                    },
-                  );
-                },
+              const SizedBox(height: 8),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: filtered.length,
+                  itemBuilder: (_, i) {
+                    final c = filtered[i];
+                    final isSelected = controller.nationalityController.text == c['code'];
+                    return ListTile(
+                      leading: Text(c['flag'] ?? '', style: const TextStyle(fontSize: 24)),
+                      title: Text(c['name'] ?? '',
+                          style: TextStyle(
+                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                            color: isSelected ? const Color(0xFFFFC107) : Colors.black,
+                          )),
+                      subtitle: Text(c['dial'] ?? '',
+                          style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                      trailing: isSelected
+                          ? const Icon(Icons.check, color: Color(0xFFFFC107))
+                          : null,
+                      onTap: () {
+                        controller.selectNationality(c['name'] ?? '');
+                        Navigator.pop(ctx);
+                      },
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

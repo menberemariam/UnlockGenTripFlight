@@ -64,10 +64,34 @@ class OneWayForm extends StatelessWidget {
         Builder(
           builder: (context) {
             return SearchButtonWidget(onPressed: () {
-              debugPrint("Searching: ${controller.departureCity.value} to ${controller.destinationCity.value}");
+              final from = controller.departureCity.value.trim();
+              final to = controller.destinationCity.value.trim();
+
+              if (from.isEmpty) {
+                Get.snackbar('Required', 'Please select a departure city',
+                    snackPosition: SnackPosition.BOTTOM,
+                    backgroundColor: const Color(0xFFFFEBEE),
+                    colorText: const Color(0xFFD32F2F));
+                return;
+              }
+              if (to.isEmpty) {
+                Get.snackbar('Required', 'Please select a destination city',
+                    snackPosition: SnackPosition.BOTTOM,
+                    backgroundColor: const Color(0xFFFFEBEE),
+                    colorText: const Color(0xFFD32F2F));
+                return;
+              }
+              if (from == to) {
+                Get.snackbar('Invalid', 'Departure and destination cannot be the same',
+                    snackPosition: SnackPosition.BOTTOM,
+                    backgroundColor: const Color(0xFFFFEBEE),
+                    colorText: const Color(0xFFD32F2F));
+                return;
+              }
+
               final searchParams = SearchParams(
-                from: controller.departureCity.value,
-                to: controller.destinationCity.value,
+                from: from,
+                to: to,
                 date: controller.selectedDate.value,
                 adults: passengersController.adults.value,
                 children: passengersController.children.value,
@@ -76,6 +100,7 @@ class OneWayForm extends StatelessWidget {
                 tripType: 'One-way',
               );
               context.read<BookingProvider>().setSearchParams(searchParams);
+              controller.setTripType(0);
               Get.toNamed(AppRoutes.results);
             });
           },
