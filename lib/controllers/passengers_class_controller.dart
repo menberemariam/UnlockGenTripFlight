@@ -5,7 +5,7 @@ class PassengersClassController extends GetxController {
   var adults = 1.obs;
   var children = 0.obs;
   var infants = 0.obs;
-  var selectedClass = 'First'.obs;
+  var selectedClass = 'Economy'.obs;
   var isClassDropdownOpen = false.obs;
   final List<String> flightClasses = [
     'Economy',

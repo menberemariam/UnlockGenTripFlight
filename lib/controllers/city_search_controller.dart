@@ -11,10 +11,11 @@ class CitySearchController extends GetxController {
   final List<String> regions = [
     'Asia',
     'Europe',
+    'Middle East',
+    'Africa',
     'Oceania',
     'North America',
     'South America',
-    'Africa',
   ];
 
   final Map<String, Map<String, List<String>>> hierarchicalData = {
@@ -57,15 +58,24 @@ class CitySearchController extends GetxController {
     'Africa': {
       'Egypt': ['Cairo', 'Alexandria'],
       'South Africa': ['Johannesburg', 'Cape Town'],
-    }
+      'Ethiopia': ['Addis Ababa'],
+      'Kenya': ['Nairobi'],
+    },
+    'Middle East': {
+      'UAE': ['Dubai', 'Abu Dhabi'],
+      'Qatar': ['Doha'],
+      'Saudi Arabia': ['Riyadh'],
+    },
   };
 
   final List<String> popularCities = [
+    'Dubai',
+    'Addis Ababa',
     'London',
     'Bangkok',
     'Istanbul',
     'Manchester',
-    'Manila'
+    'Manila',
   ];
 
   Map<String, List<String>> get currentRegionData =>
@@ -88,6 +98,7 @@ class CitySearchController extends GetxController {
         .where((e) => e.toLowerCase().contains(query))
         .toList();
   }
+
   bool get isSearching => searchText.value.trim().isNotEmpty;
 
   void updateSearch(String value) {
@@ -97,6 +108,7 @@ class CitySearchController extends GetxController {
   void changeRegion(String region) {
     selectedRegion.value = region;
   }
+
   void toggleMultipleDeparture(bool value) {
     isMultipleDeparture.value = value;
   }
@@ -121,7 +133,6 @@ class CitySearchController extends GetxController {
   }
 
   void toggleExpanded(String country) {
-    expandedCountries[country] =
-    !(expandedCountries[country] ?? false);
+    expandedCountries[country] = !(expandedCountries[country] ?? false);
   }
 }
